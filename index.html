@@ -4,7 +4,7 @@
 <meta name='impact-site-verification' value='bcb05449-c30b-4376-9df7-c18a8563b3bc'>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Lemonhead — Used Car Risk Analyzer</title>
+<title>LemonScore — Used Car Risk Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
@@ -303,7 +303,7 @@ footer a { color: var(--gray-300); }
   <div class="header-inner">
     <a href="#" class="logo">
       <div class="logo-icon">🍋</div>
-      <span class="logo-text">Lemon<span>head</span></span>
+      <span class="logo-text">Lemon<span>score</span></span>
     </a>
     <span class="header-badge">Used Car Risk Analyzer</span>
   </div>
@@ -585,9 +585,9 @@ footer a { color: var(--gray-300); }
 </main>
 
 <footer>
-  <p>Lemonhead is an informational tool only. Scores are estimates based on general reliability data.<br>
+  <p>LemonScore is an informational tool only. Scores are estimates based on general reliability data.<br>
   Always get a professional inspection and full history report before purchasing.<br>
-  <a href="#">Privacy</a> · <a href="#">Terms</a> · © 2025 Lemonhead</p>
+  <a href="#">Privacy</a> · <a href="#">Terms</a> · © 2025 LemonScore</p>
 </footer>
 
 <script>
@@ -1423,9 +1423,9 @@ function shareResult() {
   const vinPart = vin ? ` | VIN: ${vin}` : '';
   const isGoodShare = score <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
   const text = isGoodShare
-    ? `🎉 Found a good one! ${year} ${make} ${model} scored ${score}/100 on Lemonhead — ${riskLabel(level)}. Check your car free at lemonhead.app`
-    : `🍋 Lemonhead score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${riskLabel(level)}. Check your car free at lemonhead.app`;
-  if (navigator.share) navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
+    ? `🎉 Found a good one! ${year} ${make} ${model} scored ${score}/100 on LemonScore — ${riskLabel(level)}. Check your car free at getlemonscore.com`
+    : `🍋 LemonScore for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${riskLabel(level)}. Check your car free at getlemonscore.com`;
+  if (navigator.share) navigator.share({ title:'LemonScore Result', text }).catch(() => copyText(text));
   else copyText(text);
 }
 function copyText(text) {
