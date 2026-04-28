@@ -9,209 +9,169 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0A1628;
-    --navy-mid: #112240;
-    --navy-light: #1B3461;
-    --blue: #1E6FD9;
-    --blue-light: #4A9EFF;
-    --accent: #F5C842;
-    --white: #FFFFFF;
-    --off-white: #F4F6FA;
-    --gray-100: #E8ECF4;
-    --gray-300: #B0BAD0;
-    --gray-500: #6B7A99;
-    --green: #22C55E;
-    --yellow: #F59E0B;
-    --red: #EF4444;
-    --green-bg: #F0FDF4;
-    --yellow-bg: #FFFBEB;
-    --red-bg: #FEF2F2;
-    --radius: 16px;
-    --radius-sm: 10px;
-    --shadow: 0 4px 24px rgba(10,22,40,0.10);
-    --shadow-lg: 0 12px 48px rgba(10,22,40,0.18);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--navy); min-height: 100vh; overflow-x: hidden; }
-  header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .logo-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); letter-spacing: -0.5px; }
-  .logo-text span { color: var(--accent); }
-  .header-badge { font-size: 11px; font-weight: 500; color: var(--gray-300); letter-spacing: 0.5px; text-transform: uppercase; }
-  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0F2952 100%); padding: 64px 24px 80px; text-align: center; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(30,111,217,0.18) 0%, transparent 70%); pointer-events: none; }
-  .hero::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(245,200,66,0.08) 0%, transparent 70%); pointer-events: none; }
-  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: rgba(30,111,217,0.18); border: 1px solid rgba(74,158,255,0.25); color: var(--blue-light); font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; }
-  .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 56px); color: var(--white); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 16px; }
-  .hero h1 em { font-style: normal; color: var(--accent); }
-  .hero p { font-size: 17px; color: var(--gray-300); line-height: 1.6; max-width: 520px; margin: 0 auto; font-weight: 300; }
-  main { max-width: 700px; margin: -36px auto 0; padding: 0 16px 64px; position: relative; z-index: 2; }
-  .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 36px 32px; margin-bottom: 20px; }
-  @media (max-width: 500px) { .card { padding: 24px 18px; } }
-  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-  .card-title .icon { width: 32px; height: 32px; background: var(--off-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
-  .form-group { display: flex; flex-direction: column; gap: 7px; }
-  label { font-size: 13px; font-weight: 500; color: var(--gray-500); letter-spacing: 0.2px; }
-  select, input { width: 100%; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--navy); background: var(--off-white); border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none; }
-  .select-wrap { position: relative; }
-  .select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-500); pointer-events: none; font-size: 13px; }
-  select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,111,217,0.12); background: var(--white); }
-  input::placeholder { color: var(--gray-300); }
-  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-  .btn-primary { width: 100%; padding: 15px 24px; background: var(--blue); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.3px; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn-primary:hover { background: #1560c4; box-shadow: 0 6px 20px rgba(30,111,217,0.35); transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
-  #result { display: none; }
-  #result.visible { display: block; animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
-  @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
-  .risk-banner { border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
-  .risk-banner.low    { background: var(--green-bg);  border: 1.5px solid #BBF7D0; }
-  .risk-banner.medium { background: var(--yellow-bg); border: 1.5px solid #FDE68A; }
-  .risk-banner.high   { background: var(--red-bg);    border: 1.5px solid #FECACA; }
-  .risk-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-  .low .risk-dot    { background: #DCFCE7; }
-  .medium .risk-dot { background: #FEF3C7; }
-  .high .risk-dot   { background: #FEE2E2; }
-  .risk-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
-  .low .risk-label    { color: #15803D; }
-  .medium .risk-label { color: #B45309; }
-  .high .risk-label   { color: #B91C1C; }
-  .risk-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
-  .score-wrap { text-align: center; margin-bottom: 24px; }
-  .gauge-container { position: relative; width: 180px; height: 100px; margin: 0 auto 12px; overflow: hidden; }
-  .gauge-bg { width: 180px; height: 180px; border-radius: 90px 90px 0 0; background: conic-gradient(from 180deg, var(--green) 0deg 60deg, var(--yellow) 60deg 120deg, var(--red) 120deg 180deg); position: absolute; bottom: 0; left: 0; }
-  .gauge-cover { width: 140px; height: 140px; background: var(--white); border-radius: 50%; position: absolute; bottom: -70px; left: 20px; }
-  .gauge-needle { width: 3px; height: 70px; background: var(--navy); border-radius: 3px 3px 0 0; position: absolute; bottom: 0; left: calc(50% - 1.5px); transform-origin: bottom center; transform: rotate(-90deg); transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .gauge-center { width: 12px; height: 12px; background: var(--navy); border-radius: 50%; position: absolute; bottom: -6px; left: calc(50% - 6px); }
-  .score-number { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 48px; line-height: 1; color: var(--navy); letter-spacing: -2px; opacity: 0; transition: opacity 0.4s 0.6s; }
-  .score-number.show { opacity: 1; }
-  .score-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
-  .breakdown-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.6px; }
-  .factor-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14px; }
-  .factor-label { flex: 0 0 90px; color: var(--gray-500); }
-  .factor-bar-wrap { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
-  .factor-bar { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s; width: 0; }
-  .factor-bar.low-risk    { background: var(--green); }
-  .factor-bar.medium-risk { background: var(--yellow); }
-  .factor-bar.high-risk   { background: var(--red); }
-  .factor-val { font-weight: 500; color: var(--navy); min-width: 80px; text-align: right; font-size: 13px; }
-  .explanation { background: var(--off-white); border-radius: var(--radius-sm); padding: 16px 18px; font-size: 14px; line-height: 1.65; color: var(--gray-500); margin-top: 20px; }
-  .explanation strong { color: var(--navy); }
-  .btn-share { width: 100%; padding: 12px; background: transparent; color: var(--blue); font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; border: 1.5px solid var(--blue); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
-  .btn-share:hover { background: rgba(30,111,217,0.06); }
-  .affiliate-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius); padding: 32px; color: var(--white); margin-bottom: 20px; }
-  .affiliate-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; margin-bottom: 8px; letter-spacing: -0.5px; }
-  .affiliate-card p { font-size: 14px; color: var(--gray-300); margin-bottom: 24px; line-height: 1.6; font-weight: 300; }
-  .affiliate-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 440px) { .affiliate-buttons { grid-template-columns: 1fr; } }
-  .btn-affiliate { padding: 14px 16px; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-  .btn-carfax { background: var(--accent); color: var(--navy); }
-  .btn-carfax:hover { background: #f0bc2a; transform: translateY(-1px); }
-  .btn-autocheck { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
-  .btn-autocheck:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
-  .affiliate-note { font-size: 11px; color: var(--gray-500); margin-top: 10px; text-align: center; }
-  .trust-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; padding: 20px 0 4px; }
-  .trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
-  .trust-item span { font-size: 14px; }
-  footer { text-align: center; padding: 24px 16px 40px; font-size: 12px; color: var(--gray-300); line-height: 1.7; }
-  footer a { color: var(--gray-300); }
-  .error-msg { font-size: 13px; color: var(--red); margin-top: 6px; display: none; }
-  .error-msg.show { display: block; }
-  input.error, select.error { border-color: var(--red); }
+:root {
+  --navy: #0A1628; --navy-mid: #112240; --navy-light: #1B3461;
+  --blue: #1E6FD9; --blue-light: #4A9EFF; --accent: #F5C842;
+  --white: #FFFFFF; --off-white: #F4F6FA;
+  --gray-100: #E8ECF4; --gray-300: #B0BAD0; --gray-500: #6B7A99;
+  --green: #22C55E; --yellow: #F59E0B; --red: #EF4444;
+  --green-bg: #F0FDF4; --yellow-bg: #FFFBEB; --red-bg: #FEF2F2;
+  --radius: 16px; --radius-sm: 10px;
+  --shadow-lg: 0 12px 48px rgba(10,22,40,0.18);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--navy); min-height: 100vh; overflow-x: hidden; }
 
-  /* ── VIN SECTION ── */
-  .vin-section {
-    margin-bottom: 22px;
-    padding-bottom: 22px;
-    border-bottom: 1.5px dashed var(--gray-100);
-  }
-  .vin-label-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 7px;
-  }
-  .vin-label-row label { margin-bottom: 0; }
-  .vin-badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: var(--blue);
-    background: rgba(30,111,217,0.08);
-    border: 1px solid rgba(30,111,217,0.18);
-    padding: 3px 8px;
-    border-radius: 100px;
-  }
-  .vin-input-wrap { position: relative; }
-  .vin-input-wrap input { padding-right: 48px; font-family: 'DM Sans', monospace; letter-spacing: 0.5px; text-transform: uppercase; }
-  .vin-input-wrap input::placeholder { text-transform: none; letter-spacing: normal; }
-  .vin-status {
-    position: absolute;
-    right: 13px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .vin-hint {
-    font-size: 12px;
-    color: var(--gray-300);
-    margin-top: 6px;
-  }
-  .vin-success {
-    display: none;
-    align-items: center;
-    gap: 7px;
-    background: #F0FDF4;
-    border: 1px solid #BBF7D0;
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    margin-top: 8px;
-    font-size: 13px;
-    color: #15803D;
-    font-weight: 500;
-  }
-  .vin-success.show { display: flex; }
-  .vin-error-msg {
-    font-size: 13px;
-    color: var(--red);
-    margin-top: 6px;
-    display: none;
-  }
-  .vin-error-msg.show { display: block; }
+/* HEADER */
+header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); letter-spacing: -0.5px; }
+.logo-text span { color: var(--accent); }
+.header-badge { font-size: 11px; font-weight: 500; color: var(--gray-300); letter-spacing: 0.5px; text-transform: uppercase; }
 
-  /* Spinner */
-  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
-  .vin-status.spinning {
-    width: 16px; height: 16px;
-    border: 2px solid var(--gray-100);
-    border-top-color: var(--blue);
-    border-radius: 50%;
-    right: 14px;
-    animation: spin 0.7s linear infinite;
-    font-size: 0;
-  }
-  /* VIN badge on result */
-  .vin-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--off-white);
-    border: 1px solid var(--gray-100);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-family: monospace;
-    color: var(--gray-500);
-    margin-bottom: 18px;
-    letter-spacing: 0.5px;
-  }
+/* HERO */
+.hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0F2952 100%); padding: 48px 24px 72px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(30,111,217,0.18) 0%, transparent 70%); pointer-events: none; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: rgba(30,111,217,0.18); border: 1px solid rgba(74,158,255,0.25); color: var(--blue-light); font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; }
+.hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 48px); color: var(--white); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 12px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { font-size: 16px; color: var(--gray-300); line-height: 1.6; max-width: 480px; margin: 0 auto; font-weight: 300; }
+
+/* MAIN */
+main { max-width: 680px; margin: -32px auto 0; padding: 0 16px 64px; position: relative; z-index: 2; }
+
+/* PROGRESS BAR */
+.progress-wrap { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 20px 28px; margin-bottom: 16px; }
+.progress-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.progress-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
+.progress-count { font-size: 12px; color: var(--gray-500); }
+.progress-track { height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--blue-light)); border-radius: 3px; transition: width 0.4s cubic-bezier(0.16,1,0.3,1); }
+.step-dots { display: flex; gap: 8px; margin-top: 12px; }
+.step-dot { flex: 1; text-align: center; font-size: 11px; font-weight: 500; color: var(--gray-300); transition: color 0.3s; }
+.step-dot.active { color: var(--blue); }
+.step-dot.done { color: var(--green); }
+
+/* CARD */
+.card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 32px 28px; margin-bottom: 16px; animation: fadeIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 500px) { .card { padding: 22px 16px; } }
+.card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+.card-title .icon { width: 32px; height: 32px; background: var(--off-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+/* FORM ELEMENTS */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 13px; font-weight: 500; color: var(--gray-500); letter-spacing: 0.2px; }
+select, input[type="text"], input[type="number"] { width: 100%; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--navy); background: var(--off-white); border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none; }
+.select-wrap { position: relative; }
+.select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-500); pointer-events: none; font-size: 13px; }
+select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,111,217,0.12); background: var(--white); }
+input::placeholder { color: var(--gray-300); }
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.error-msg { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+.error-msg.show { display: block; }
+input.error, select.error { border-color: var(--red); }
+
+/* VIN */
+.vin-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1.5px dashed var(--gray-100); }
+.vin-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.vin-label-row label { margin-bottom: 0; }
+.vin-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--blue); background: rgba(30,111,217,0.08); border: 1px solid rgba(30,111,217,0.18); padding: 3px 8px; border-radius: 100px; }
+.vin-input-wrap { position: relative; }
+.vin-input-wrap input { padding-right: 48px; letter-spacing: 0.5px; text-transform: uppercase; }
+.vin-input-wrap input::placeholder { text-transform: none; letter-spacing: normal; }
+.vin-status { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); font-size: 16px; pointer-events: none; }
+.vin-hint { font-size: 12px; color: var(--gray-300); margin-top: 6px; }
+.vin-success { display: none; align-items: center; gap: 7px; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 8px; font-size: 13px; color: #15803D; font-weight: 500; }
+.vin-success.show { display: flex; }
+.vin-error-msg { font-size: 13px; color: var(--red); margin-top: 6px; display: none; }
+.vin-error-msg.show { display: block; }
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+.vin-status.spinning { width: 16px; height: 16px; border: 2px solid var(--gray-100); border-top-color: var(--blue); border-radius: 50%; right: 14px; animation: spin 0.7s linear infinite; font-size: 0; }
+
+/* TOGGLE (driving type) */
+.toggle-group { display: flex; gap: 8px; }
+.toggle-btn { flex: 1; padding: 10px 8px; background: var(--off-white); border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--gray-500); cursor: pointer; transition: all 0.2s; text-align: center; }
+.toggle-btn.selected { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.toggle-btn:hover:not(.selected) { border-color: var(--blue); color: var(--blue); }
+
+/* BUTTON GROUP */
+.btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-group-item { padding: 9px 16px; background: var(--off-white); border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--gray-500); cursor: pointer; transition: all 0.2s; }
+.btn-group-item.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.btn-group-item:hover:not(.selected) { border-color: var(--navy); color: var(--navy); }
+.btn-group-item.danger.selected { background: var(--red); border-color: var(--red); }
+.btn-group-item.warning.selected { background: var(--yellow); border-color: var(--yellow); color: var(--navy); }
+.btn-group-item.safe.selected { background: var(--green); border-color: var(--green); }
+
+/* NAV BUTTONS */
+.step-nav { display: flex; gap: 12px; margin-top: 20px; }
+.btn-primary { flex: 1; padding: 14px 24px; background: var(--blue); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary:hover { background: #1560c4; box-shadow: 0 6px 20px rgba(30,111,217,0.35); transform: translateY(-1px); }
+.btn-back { padding: 14px 20px; background: transparent; color: var(--gray-500); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 15px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
+.btn-back:hover { border-color: var(--gray-300); color: var(--navy); }
+
+/* RESULTS */
+.risk-banner { border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+.risk-banner.low    { background: var(--green-bg);  border: 1.5px solid #BBF7D0; }
+.risk-banner.medium { background: var(--yellow-bg); border: 1.5px solid #FDE68A; }
+.risk-banner.high   { background: var(--red-bg);    border: 1.5px solid #FECACA; }
+.risk-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.low .risk-dot    { background: #DCFCE7; }
+.medium .risk-dot { background: #FEF3C7; }
+.high .risk-dot   { background: #FEE2E2; }
+.risk-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+.low .risk-label    { color: #15803D; }
+.medium .risk-label { color: #B45309; }
+.high .risk-label   { color: #B91C1C; }
+.risk-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+.score-wrap { text-align: center; margin-bottom: 22px; }
+.gauge-container { position: relative; width: 180px; height: 100px; margin: 0 auto 12px; overflow: hidden; }
+.gauge-bg { width: 180px; height: 180px; border-radius: 90px 90px 0 0; background: conic-gradient(from 180deg, var(--green) 0deg 60deg, var(--yellow) 60deg 120deg, var(--red) 120deg 180deg); position: absolute; bottom: 0; left: 0; }
+.gauge-cover { width: 140px; height: 140px; background: var(--white); border-radius: 50%; position: absolute; bottom: -70px; left: 20px; }
+.gauge-needle { width: 3px; height: 70px; background: var(--navy); border-radius: 3px 3px 0 0; position: absolute; bottom: 0; left: calc(50% - 1.5px); transform-origin: bottom center; transform: rotate(-90deg); transition: transform 1.2s cubic-bezier(0.34,1.56,0.64,1); }
+.gauge-center { width: 12px; height: 12px; background: var(--navy); border-radius: 50%; position: absolute; bottom: -6px; left: calc(50% - 6px); }
+.score-number { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 48px; line-height: 1; color: var(--navy); letter-spacing: -2px; opacity: 0; transition: opacity 0.4s 0.6s; }
+.score-number.show { opacity: 1; }
+.score-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+.breakdown-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.6px; }
+.factor-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+.factor-label { flex: 0 0 100px; color: var(--gray-500); font-size: 12px; }
+.factor-bar-wrap { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.factor-bar { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.16,1,0.3,1) 0.3s; width: 0; }
+.factor-bar.low-risk    { background: var(--green); }
+.factor-bar.medium-risk { background: var(--yellow); }
+.factor-bar.high-risk   { background: var(--red); }
+.factor-val { font-weight: 500; color: var(--navy); min-width: 52px; text-align: right; font-size: 12px; }
+.explanation { background: var(--off-white); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; line-height: 1.65; color: var(--gray-500); margin-top: 16px; }
+.explanation strong { color: var(--navy); }
+.vin-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--off-white); border: 1px solid var(--gray-100); border-radius: 6px; padding: 4px 10px; font-size: 12px; font-family: monospace; color: var(--gray-500); margin-bottom: 16px; letter-spacing: 0.5px; }
+
+/* AFFILIATE */
+.affiliate-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius); padding: 28px; color: var(--white); margin-bottom: 16px; }
+.affiliate-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; letter-spacing: -0.5px; }
+.affiliate-card p { font-size: 13px; color: var(--gray-300); margin-bottom: 20px; line-height: 1.6; font-weight: 300; }
+.affiliate-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 440px) { .affiliate-buttons { grid-template-columns: 1fr; } }
+.btn-affiliate { padding: 13px 14px; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 7px; border: none; }
+.btn-carfax { background: var(--accent); color: var(--navy); }
+.btn-carfax:hover { background: #f0bc2a; transform: translateY(-1px); }
+.btn-autocheck { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+.btn-autocheck:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+.affiliate-note { font-size: 11px; color: var(--gray-500); margin-top: 8px; text-align: center; }
+.btn-share { width: 100%; padding: 12px; background: transparent; color: var(--blue); font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; border: 1.5px solid var(--blue); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; }
+.btn-share:hover { background: rgba(30,111,217,0.06); }
+.trust-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; padding: 16px 0 4px; }
+.trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
+footer { text-align: center; padding: 20px 16px 40px; font-size: 12px; color: var(--gray-300); line-height: 1.7; }
+footer a { color: var(--gray-300); }
 </style>
 </head>
 <body>
@@ -229,16 +189,30 @@
 <div class="hero">
   <div class="hero-eyebrow">🔍 Free Instant Analysis</div>
   <h1>Is that car a <em>lemon?</em></h1>
-  <p>Enter the car details below and we'll calculate a risk score in seconds — before you hand over a dime.</p>
+  <p>Answer a few quick questions and get an instant risk score — before you hand over a dime.</p>
 </div>
 
 <main>
-  <div class="card">
-    <div class="card-title">
-      <div class="icon">🚗</div>
-      Vehicle Details
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-header">
+      <span class="progress-label" id="progress-label">Step 1 of 3 — Basic Info</span>
+      <span class="progress-count" id="progress-count">33%</span>
     </div>
-    <!-- VIN LOOKUP -->
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:33%"></div>
+    </div>
+    <div class="step-dots">
+      <div class="step-dot active" id="dot-1">🚗 Basic Info</div>
+      <div class="step-dot" id="dot-2">⛽ Usage</div>
+      <div class="step-dot" id="dot-3">📋 History</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: BASIC INFO -->
+  <div class="card step-panel active" id="step-1">
+    <div class="card-title"><div class="icon">🚗</div>Basic Info</div>
+
     <div class="vin-section">
       <div class="vin-label-row">
         <label for="vin">VIN Number</label>
@@ -249,7 +223,7 @@
         <span class="vin-status" id="vin-status"></span>
       </div>
       <div class="vin-hint">Optional — 17-character VIN auto-fills make, model &amp; year via NHTSA.</div>
-      <div class="vin-success" id="vin-success">✅ <span id="vin-success-text">VIN decoded successfully</span></div>
+      <div class="vin-success" id="vin-success">✅ <span id="vin-success-text">VIN decoded</span></div>
       <div class="vin-error-msg" id="vin-error"></div>
     </div>
 
@@ -257,45 +231,131 @@
       <div class="form-group">
         <label for="make">Make</label>
         <div class="select-wrap">
-          <select id="make">
-            <option value="">Select make…</option>
-            <option>Toyota</option><option>Honda</option><option>Mazda</option>
-            <option>Subaru</option><option>Hyundai</option><option>Kia</option>
-            <option>Chevrolet</option><option>Ford</option><option>Dodge</option>
-            <option>Chrysler</option><option>Jeep</option><option>GMC</option>
-            <option>Nissan</option><option>Volkswagen</option><option>BMW</option>
-            <option>Mercedes-Benz</option><option>Audi</option><option>Lexus</option>
-            <option>Acura</option><option>Infiniti</option><option>Cadillac</option>
-            <option>Lincoln</option><option>Ram</option><option>Buick</option>
-            <option>Volvo</option><option>Mitsubishi</option><option>Other</option>
-          </select>
+          <select id="make"><option value="">Select make…</option></select>
         </div>
         <span class="error-msg" id="err-make">Please select a make.</span>
       </div>
       <div class="form-group">
         <label for="model">Model</label>
-        <input type="text" id="model" placeholder="e.g. Camry, F-150…" maxlength="40">
+        <input type="text" id="model" placeholder="e.g. Camry, F-150…" maxlength="40" list="model-suggestions" autocomplete="off">
+        <datalist id="model-suggestions"></datalist>
         <span class="error-msg" id="err-model">Please enter a model.</span>
       </div>
-      <div class="form-group">
+      <div class="form-group full">
         <label for="year">Year</label>
-        <input type="number" id="year" placeholder="e.g. 2018" min="1980" max="2025">
-        <span class="error-msg" id="err-year">Enter a year between 1980–2025.</span>
+        <input type="number" id="year" placeholder="e.g. 2018" min="1980" max="2026">
+        <span class="error-msg" id="err-year">Enter a year between 1980–2026.</span>
       </div>
-      <div class="form-group">
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-primary" onclick="goNext(1)">Next — Mileage &amp; Usage →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: MILEAGE & USAGE -->
+  <div class="card step-panel" id="step-2">
+    <div class="card-title"><div class="icon">⛽</div>Mileage &amp; Usage</div>
+
+    <div class="form-grid">
+      <div class="form-group full">
         <label for="mileage">Mileage</label>
         <input type="number" id="mileage" placeholder="e.g. 72000" min="0" max="500000">
         <span class="error-msg" id="err-mileage">Enter a valid mileage (0–500,000).</span>
       </div>
+
+      <div class="form-group full">
+        <label>Driving Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn selected" data-val="highway" onclick="selectToggle(this,'driving')">🛣️ Highway</button>
+          <button class="toggle-btn" data-val="mixed" onclick="selectToggle(this,'driving')">🔀 Mixed</button>
+          <button class="toggle-btn" data-val="city" onclick="selectToggle(this,'driving')">🏙️ City</button>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label for="state">State of Registration</label>
+        <div class="select-wrap">
+          <select id="state">
+            <option value="">Select state…</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+            <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+            <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+            <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+            <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+            <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+            <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+            <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+            <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+            <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+            <option>Wisconsin</option><option>Wyoming</option>
+          </select>
+        </div>
+        <span class="error-msg" id="err-state">Please select a state.</span>
+      </div>
     </div>
-    <button class="btn-primary" onclick="analyze()">🔍 Analyze This Car</button>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goBack(2)">← Back</button>
+      <button class="btn-primary" onclick="goNext(2)">Next — Vehicle History →</button>
+    </div>
   </div>
 
-  <div class="card" id="result">
-    <div class="card-title">
-      <div class="icon">📊</div>
-      Lemon Risk Score
+  <!-- STEP 3: VEHICLE HISTORY -->
+  <div class="card step-panel" id="step-3">
+    <div class="card-title"><div class="icon">📋</div>Vehicle History</div>
+
+    <div class="form-group" style="margin-bottom:18px">
+      <label>Previous Owners</label>
+      <div class="btn-group" id="grp-owners">
+        <button class="btn-group-item safe selected" data-val="1" onclick="selectGroup(this,'owners')">1 Owner</button>
+        <button class="btn-group-item" data-val="2" onclick="selectGroup(this,'owners')">2 Owners</button>
+        <button class="btn-group-item warning" data-val="3" onclick="selectGroup(this,'owners')">3 Owners</button>
+        <button class="btn-group-item danger" data-val="4" onclick="selectGroup(this,'owners')">4+ Owners</button>
+      </div>
     </div>
+
+    <div class="form-group" style="margin-bottom:18px">
+      <label>Accident History</label>
+      <div class="btn-group" id="grp-accidents">
+        <button class="btn-group-item safe selected" data-val="none" onclick="selectGroup(this,'accidents')">None</button>
+        <button class="btn-group-item warning" data-val="minor" onclick="selectGroup(this,'accidents')">Minor</button>
+        <button class="btn-group-item danger" data-val="major" onclick="selectGroup(this,'accidents')">Major</button>
+        <button class="btn-group-item" data-val="unknown" onclick="selectGroup(this,'accidents')">Unknown</button>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:18px">
+      <label>Title Type</label>
+      <div class="btn-group" id="grp-title">
+        <button class="btn-group-item safe selected" data-val="clean" onclick="selectGroup(this,'title')">Clean</button>
+        <button class="btn-group-item danger" data-val="salvage" onclick="selectGroup(this,'title')">Salvage</button>
+        <button class="btn-group-item warning" data-val="rebuilt" onclick="selectGroup(this,'title')">Rebuilt</button>
+        <button class="btn-group-item danger" data-val="lemon" onclick="selectGroup(this,'title')">Lemon Law Buyback</button>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:4px">
+      <label>Service History</label>
+      <div class="btn-group" id="grp-service">
+        <button class="btn-group-item safe selected" data-val="full" onclick="selectGroup(this,'service')">Full Records</button>
+        <button class="btn-group-item warning" data-val="partial" onclick="selectGroup(this,'service')">Partial</button>
+        <button class="btn-group-item danger" data-val="none" onclick="selectGroup(this,'service')">None</button>
+        <button class="btn-group-item" data-val="unknown" onclick="selectGroup(this,'service')">Unknown</button>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goBack(3)">← Back</button>
+      <button class="btn-primary" onclick="analyze()">🔍 Get My Risk Score</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: RESULTS -->
+  <div class="card step-panel" id="step-4">
+    <div class="card-title"><div class="icon">📊</div>Lemon Risk Score</div>
     <div id="vin-chip" class="vin-chip" style="display:none;">🔍 <span id="vin-chip-text"></span></div>
     <div id="risk-banner" class="risk-banner low">
       <div class="risk-dot" id="risk-dot">✅</div>
@@ -315,25 +375,18 @@
       <div class="score-label">out of 100 &nbsp;•&nbsp; higher = riskier</div>
     </div>
     <div class="breakdown-title">Risk Factors</div>
-    <div class="factor-row">
-      <span class="factor-label">Age</span>
-      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div>
-      <span class="factor-val" id="val-age">—</span>
-    </div>
-    <div class="factor-row">
-      <span class="factor-label">Mileage</span>
-      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-mileage"></div></div>
-      <span class="factor-val" id="val-mileage">—</span>
-    </div>
-    <div class="factor-row">
-      <span class="factor-label">Reliability</span>
-      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div>
-      <span class="factor-val" id="val-brand">—</span>
-    </div>
+    <div class="factor-row"><span class="factor-label">Age</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div><span class="factor-val" id="val-age">—</span></div>
+    <div class="factor-row"><span class="factor-label">Mileage</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-mileage"></div></div><span class="factor-val" id="val-mileage">—</span></div>
+    <div class="factor-row"><span class="factor-label">Reliability</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div><span class="factor-val" id="val-brand">—</span></div>
+    <div class="factor-row"><span class="factor-label">History</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-history"></div></div><span class="factor-val" id="val-history">—</span></div>
     <div class="explanation" id="explanation"></div>
     <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
+    <div style="margin-top:12px;text-align:center">
+      <button class="btn-back" onclick="startOver()" style="width:100%;margin-top:4px">← Start Over</button>
+    </div>
   </div>
 
+  <!-- AFFILIATE (shown with results) -->
   <div class="card affiliate-card" id="affiliate" style="display:none;">
     <h2>Get the Full Picture</h2>
     <p>Our score is a starting point. A full vehicle history report reveals accidents, title issues, odometer fraud, and previous owners — things our score can't see.</p>
@@ -344,7 +397,7 @@
     <div class="affiliate-note">Affiliate links — we may earn a commission at no cost to you.</div>
   </div>
 
-  <div class="trust-row">
+  <div class="trust-row" id="trust-row">
     <div class="trust-item"><span>🔒</span> No data stored</div>
     <div class="trust-item"><span>⚡</span> Instant results</div>
     <div class="trust-item"><span>💸</span> 100% free</div>
@@ -359,123 +412,43 @@
 </footer>
 
 <script>
-// ── VIN LOOKUP ──────────────────────────────────────────────────────────────
-let vinDebounceTimer = null;
+// ── STATE ────────────────────────────────────────────────────────────────────
 let currentVin = '';
+let vinDebounceTimer = null;
+const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full' };
 
-function onVinInput(el) {
-  const raw = el.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-  el.value = raw;
-  clearTimeout(vinDebounceTimer);
-  resetVinUI();
+// ── MAKES & MODELS ───────────────────────────────────────────────────────────
+const MAKES = ['Acura','Audi','BMW','Buick','Cadillac','Chevrolet','Chrysler','Dodge','Ford','GMC','Honda','Hyundai','Infiniti','Jeep','Kia','Lexus','Lincoln','Mazda','Mercedes-Benz','Mitsubishi','Nissan','Ram','Subaru','Toyota','Volkswagen','Volvo','Other'].sort((a,b) => a==='Other'?1:b==='Other'?-1:a.localeCompare(b));
 
-  if (raw.length === 0) return;
-  if (raw.length < 17) {
-    setVinStatus('');
-    return;
-  }
-  if (raw.length === 17) {
-    setVinStatus('spinning');
-    vinDebounceTimer = setTimeout(() => decodeVin(raw), 400);
-  }
-}
-
-function resetVinUI() {
-  currentVin = '';
-  setVinStatus('');
-  document.getElementById('vin-success').classList.remove('show');
-  document.getElementById('vin-error').classList.remove('show');
-  document.getElementById('vin-error').textContent = '';
-}
-
-function setVinStatus(state) {
-  const el = document.getElementById('vin-status');
-  el.className = 'vin-status';
-  if (state === 'spinning') { el.classList.add('spinning'); el.textContent = ''; }
-  else if (state === 'ok')   { el.textContent = '✅'; }
-  else if (state === 'err')  { el.textContent = '❌'; }
-  else                       { el.textContent = ''; }
-}
-
-async function decodeVin(vin) {
-  try {
-    const url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Network error');
-    const data = await res.json();
-    const r = data.Results?.[0];
-    if (!r || r.ErrorCode?.startsWith('11') || r.ErrorCode === '8') {
-      throw new Error('VIN not found');
-    }
-    // Pull fields
-    const make  = r.Make  ? titleCase(r.Make)  : '';
-    const model = r.Model ? titleCase(r.Model) : '';
-    const year  = r.ModelYear ? parseInt(r.ModelYear) : null;
-
-    if (!make && !model && !year) throw new Error('Could not decode VIN');
-
-    // Auto-fill form
-    if (make)  setSelectValue('make', make);
-    if (model) document.getElementById('model').value = model;
-    if (year && year >= 1980 && year <= new Date().getFullYear()) {
-      document.getElementById('year').value = year;
-    }
-
-    // Clear any field errors that were filled
-    ['make','model','year'].forEach(id => {
-      document.getElementById(id).classList.remove('error');
-      const e = document.getElementById('err-'+id);
-      if (e) e.classList.remove('show');
-    });
-
-    currentVin = vin;
-    setVinStatus('ok');
-    const filled = [make, model, year].filter(Boolean).join(' ');
-    document.getElementById('vin-success-text').textContent = `Decoded: ${filled}`;
-    document.getElementById('vin-success').classList.add('show');
-  } catch (err) {
-    setVinStatus('err');
-    const errEl = document.getElementById('vin-error');
-    errEl.textContent = 'Could not decode this VIN. Please fill in the details manually.';
-    errEl.classList.add('show');
-  }
-}
-
-function titleCase(str) {
-  // Handle known all-caps brand names
-  const upper = ['BMW','GMC','RAM','KIA'];
-  if (upper.includes(str.toUpperCase())) return str.toUpperCase();
-  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-}
-
-function setSelectValue(id, value) {
-  const sel = document.getElementById(id);
-  // Try exact match first, then case-insensitive
-  for (const opt of sel.options) {
-    if (opt.value.toLowerCase() === value.toLowerCase()) {
-      sel.value = opt.value;
-      return;
-    }
-  }
-  // No match — set "Other"
-  sel.value = 'Other';
-}
-
-function updateAffiliateLinks(vin) {
-  const carfax    = document.getElementById('link-carfax');
-  const autocheck = document.getElementById('link-autocheck');
-  if (vin) {
-    carfax.href    = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DEV_0&vin=${vin}`;
-    autocheck.href = `https://www.autocheck.com/vehiclehistory/search.do?vin=${vin}`;
-    carfax.innerHTML    = '🛡️ Carfax Report for this VIN';
-    autocheck.innerHTML = '📋 AutoCheck Report for this VIN';
-  } else {
-    carfax.href    = 'https://www.carfax.com';
-    autocheck.href = 'https://www.autocheck.com';
-    carfax.innerHTML    = '🛡️ Check on Carfax';
-    autocheck.innerHTML = '📋 Check on AutoCheck';
-  }
-}
+const MODEL_SUGGESTIONS = {
+  'Acura':['ILX','MDX','NSX','RDX','RLX','TLX'],
+  'Audi':['A3','A4','A5','A6','A7','A8','Q3','Q5','Q7','Q8','TT','e-tron'],
+  'BMW':['1 Series','2 Series','3 Series','4 Series','5 Series','7 Series','M3','M4','M5','X1','X3','X5','X6','X7','Z4'],
+  'Buick':['Enclave','Encore','Envision','LaCrosse','Regal'],
+  'Cadillac':['ATS','CT4','CT5','CT6','Escalade','XT4','XT5','XT6'],
+  'Chevrolet':['Blazer','Camaro','Colorado','Corvette','Equinox','Impala','Malibu','Silverado 1500','Silverado 2500','Suburban','Tahoe','Traverse','Trax'],
+  'Chrysler':['200','300','Pacifica','Voyager'],
+  'Dodge':['Challenger','Charger','Dart','Durango','Grand Caravan','Journey'],
+  'Ford':['Bronco','Edge','Escape','Expedition','Explorer','F-150','F-250','Focus','Fusion','Maverick','Mustang','Ranger','Transit'],
+  'GMC':['Acadia','Canyon','Sierra 1500','Sierra 2500','Terrain','Yukon'],
+  'Honda':['Accord','Civic','CR-V','Element','Fit','HR-V','Odyssey','Passport','Pilot','Ridgeline'],
+  'Hyundai':['Accent','Elantra','Ioniq 5','Ioniq 6','Kona','Palisade','Santa Fe','Sonata','Tucson','Venue'],
+  'Infiniti':['G35','G37','Q50','Q60','QX50','QX60','QX80'],
+  'Jeep':['Cherokee','Compass','Gladiator','Grand Cherokee','Renegade','Wrangler'],
+  'Kia':['Carnival','EV6','Forte','K5','Niro','Seltos','Soul','Sorento','Sportage','Stinger','Telluride'],
+  'Lexus':['ES','GS','GX','IS','LC','LS','LX','NX','RX','UX'],
+  'Lincoln':['Aviator','Continental','Corsair','MKZ','Navigator'],
+  'Mazda':['CX-3','CX-30','CX-5','CX-50','CX-9','Mazda3','Mazda6','MX-5 Miata'],
+  'Mercedes-Benz':['A-Class','C-Class','CLA','E-Class','G-Class','GLA','GLC','GLE','GLS','S-Class','Sprinter'],
+  'Mitsubishi':['Eclipse Cross','Lancer','Mirage','Outlander','Outlander Sport'],
+  'Nissan':['370Z','Altima','Armada','Frontier','Kicks','Leaf','Maxima','Murano','Pathfinder','Rogue','Sentra','Titan','Versa'],
+  'Ram':['1500','2500','3500','ProMaster'],
+  'Subaru':['Ascent','BRZ','Crosstrek','Forester','Impreza','Legacy','Outback','WRX'],
+  'Toyota':['4Runner','Avalon','Camry','Corolla','Highlander','Land Cruiser','Prius','RAV4','Sequoia','Sienna','Tacoma','Tundra','Venza'],
+  'Volkswagen':['Arteon','Atlas','Golf','GTI','ID.4','Jetta','Passat','Tiguan'],
+  'Volvo':['S60','S90','V60','XC40','XC60','XC90'],
+  'Other':[]
+};
 
 const RELIABILITY = {
   'toyota':5,'lexus':7,'honda':8,'acura':10,'mazda':9,'subaru':13,'hyundai':14,'kia':15,
@@ -483,65 +456,242 @@ const RELIABILITY = {
   'ram':22,'volvo':21,'infiniti':18,'bmw':27,'audi':28,'mercedes-benz':25,'cadillac':27,
   'lincoln':25,'jeep':31,'dodge':32,'chrysler':35,'other':23
 };
-const RELIABILITY_LABELS = [
-  [0,'Excellent'],[10,'Very Good'],[15,'Good'],[20,'Average'],[25,'Below Avg'],[30,'Poor'],[35,'Very Poor']
-];
-function getReliabilityLabel(score) {
-  let label = 'Excellent';
-  for (const [k,v] of RELIABILITY_LABELS) { if (score >= k) label = v; }
-  return label;
+
+const RUST_BELT = ['Michigan','Ohio','New York','Pennsylvania','Indiana','Illinois','Wisconsin','Minnesota'];
+
+// ── POPULATE MAKES ───────────────────────────────────────────────────────────
+(function() {
+  const sel = document.getElementById('make');
+  MAKES.forEach(m => { const o = document.createElement('option'); o.value = m; o.textContent = m; sel.appendChild(o); });
+})();
+
+document.getElementById('make').addEventListener('change', function() {
+  updateModelSuggestions(this.value);
+  if (!currentVin) document.getElementById('model').value = '';
+});
+
+function updateModelSuggestions(make) {
+  const dl = document.getElementById('model-suggestions');
+  dl.innerHTML = '';
+  (MODEL_SUGGESTIONS[make] || []).forEach(m => { const o = document.createElement('option'); o.value = m; dl.appendChild(o); });
 }
-function calcScore(year, mileage, make) {
-  const age = new Date().getFullYear() - year;
-  let ageFactor = age <= 2 ? 3 : age <= 4 ? 8 : age <= 6 ? 14 : age <= 10 ? 22 : age <= 15 ? 29 : 35;
-  let milageFactor = mileage < 20000 ? 4 : mileage < 50000 ? 10 : mileage < 80000 ? 17 : mileage < 120000 ? 26 : mileage < 160000 ? 34 : 40;
-  const brandFactor = RELIABILITY[make.toLowerCase()] ?? 23;
-  const total = Math.min(100, ageFactor + milageFactor + brandFactor);
-  return { total, ageFactor, milageFactor, brandFactor };
+
+// ── VIN LOOKUP ───────────────────────────────────────────────────────────────
+function onVinInput(el) {
+  const raw = el.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+  el.value = raw;
+  clearTimeout(vinDebounceTimer);
+  resetVinUI();
+  if (raw.length === 17) { setVinStatus('spinning'); vinDebounceTimer = setTimeout(() => decodeVin(raw), 400); }
 }
-function riskLevel(s) { return s < 35 ? 'low' : s < 65 ? 'medium' : 'high'; }
-function barClass(p)  { return p < 35 ? 'low-risk' : p < 65 ? 'medium-risk' : 'high-risk'; }
-function buildExplanation(make, model, year, mileage, scores) {
-  const age = new Date().getFullYear() - year;
-  const relLabel = getReliabilityLabel(scores.brandFactor);
-  const parts = [];
-  if (scores.milageFactor >= 26) parts.push(`High mileage (${mileage.toLocaleString()} mi) significantly increases wear and repair risk.`);
-  else if (scores.milageFactor >= 10) parts.push(`Moderate mileage (${mileage.toLocaleString()} mi) is within the normal range for its age.`);
-  else parts.push(`Low mileage (${mileage.toLocaleString()} mi) is a strong positive signal.`);
-  if (scores.ageFactor >= 22) parts.push(`At ${age} years old, this car may be approaching the age where major repairs become common.`);
-  else if (scores.ageFactor >= 8) parts.push(`Age (${age} yrs) is a moderate factor — most systems are proven but worth a mechanic's check.`);
-  else parts.push(`It's relatively new at ${age} years old — age adds minimal risk.`);
-  parts.push(`<strong>${make}</strong> carries a reliability rating of <strong>${relLabel}</strong> based on industry data.`);
-  return parts.join(' ');
+function resetVinUI() {
+  currentVin = ''; setVinStatus('');
+  document.getElementById('vin-success').classList.remove('show');
+  document.getElementById('vin-error').classList.remove('show');
+  document.getElementById('vin-error').textContent = '';
 }
-function validate() {
+function setVinStatus(state) {
+  const el = document.getElementById('vin-status');
+  el.className = 'vin-status';
+  if (state==='spinning') { el.classList.add('spinning'); el.textContent=''; }
+  else if (state==='ok')  el.textContent='✅';
+  else if (state==='err') el.textContent='❌';
+  else el.textContent='';
+}
+async function decodeVin(vin) {
+  try {
+    const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+    const data = await res.json();
+    const r = data.Results?.[0];
+    if (!r || r.ErrorCode?.startsWith('11')) throw new Error('Not found');
+    const make = r.Make ? titleCase(r.Make) : '';
+    const model = r.Model ? titleCase(r.Model) : '';
+    const year = r.ModelYear ? parseInt(r.ModelYear) : null;
+    if (!make && !model && !year) throw new Error('No data');
+    if (make) { setSelectValue('make', make); updateModelSuggestions(make); }
+    if (model) document.getElementById('model').value = model;
+    if (year && year >= 1980) document.getElementById('year').value = year;
+    ['make','model','year'].forEach(id => { document.getElementById(id).classList.remove('error'); const e=document.getElementById('err-'+id); if(e) e.classList.remove('show'); });
+    currentVin = vin; setVinStatus('ok');
+    document.getElementById('vin-success-text').textContent = `Decoded: ${[make,model,year].filter(Boolean).join(' ')}`;
+    document.getElementById('vin-success').classList.add('show');
+  } catch {
+    setVinStatus('err');
+    const e = document.getElementById('vin-error');
+    e.textContent = 'Could not decode this VIN. Please fill in details manually.';
+    e.classList.add('show');
+  }
+}
+function titleCase(str) {
+  const upper = ['BMW','GMC','RAM','KIA'];
+  if (upper.includes(str.toUpperCase())) return str.toUpperCase();
+  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+function setSelectValue(id, value) {
+  const sel = document.getElementById(id);
+  for (const opt of sel.options) { if (opt.value.toLowerCase()===value.toLowerCase()) { sel.value=opt.value; return; } }
+  sel.value='Other';
+}
+
+// ── TOGGLE & BUTTON GROUPS ───────────────────────────────────────────────────
+function selectToggle(btn, key) {
+  btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selections[key] = btn.dataset.val;
+}
+function selectGroup(btn, key) {
+  btn.closest('.btn-group').querySelectorAll('.btn-group-item').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selections[key] = btn.dataset.val;
+}
+
+// ── STEP NAVIGATION ──────────────────────────────────────────────────────────
+let currentStep = 1;
+const STEP_LABELS = ['Basic Info','Mileage & Usage','Vehicle History'];
+
+function goNext(from) {
+  if (!validateStep(from)) return;
+  currentStep = from + 1;
+  showStep(currentStep);
+}
+function goBack(from) {
+  currentStep = from - 1;
+  showStep(currentStep);
+}
+function showStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`step-${n}`).classList.add('active');
+  updateProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function updateProgress(step) {
+  const pct = Math.round((step / 3) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = step <= 3 ? `Step ${step} of 3 — ${STEP_LABELS[step-1]}` : 'Your Results';
+  document.getElementById('progress-count').textContent = pct + '%';
+  ['dot-1','dot-2','dot-3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'step-dot';
+    if (i+1 < step) el.classList.add('done');
+    else if (i+1 === step) el.classList.add('active');
+  });
+  if (step === 4) {
+    document.getElementById('progress-wrap').style.display = 'none';
+  } else {
+    document.getElementById('progress-wrap').style.display = 'block';
+  }
+}
+
+function validateStep(step) {
   let ok = true;
-  const checks = [
-    { id:'make',    err:'err-make',    test: v => v !== '' },
-    { id:'model',   err:'err-model',   test: v => v.trim().length > 0 },
-    { id:'year',    err:'err-year',    test: v => { const n=parseInt(v); return !isNaN(n) && n>=1980 && n<=new Date().getFullYear(); }},
-    { id:'mileage', err:'err-mileage', test: v => { const n=parseInt(v); return !isNaN(n) && n>=0 && n<=500000; }},
-  ];
-  for (const c of checks) {
-    const el = document.getElementById(c.id);
-    const errEl = document.getElementById(c.err);
-    if (!c.test(el.value)) { el.classList.add('error'); errEl.classList.add('show'); ok = false; }
-    else { el.classList.remove('error'); errEl.classList.remove('show'); }
+  if (step === 1) {
+    const checks = [
+      { id:'make', err:'err-make', test: v => v !== '' },
+      { id:'model', err:'err-model', test: v => v.trim().length > 0 },
+      { id:'year', err:'err-year', test: v => { const n=parseInt(v); return !isNaN(n)&&n>=1980&&n<=new Date().getFullYear(); }},
+    ];
+    checks.forEach(c => {
+      const el = document.getElementById(c.id);
+      const errEl = document.getElementById(c.err);
+      if (!c.test(el.value)) { el.classList.add('error'); errEl.classList.add('show'); ok=false; }
+      else { el.classList.remove('error'); errEl.classList.remove('show'); }
+    });
+  }
+  if (step === 2) {
+    const mil = parseInt(document.getElementById('mileage').value);
+    const milEl = document.getElementById('mileage');
+    const milErr = document.getElementById('err-mileage');
+    if (isNaN(mil)||mil<0||mil>500000) { milEl.classList.add('error'); milErr.classList.add('show'); ok=false; }
+    else { milEl.classList.remove('error'); milErr.classList.remove('show'); }
+    const state = document.getElementById('state').value;
+    const stErr = document.getElementById('err-state');
+    if (!state) { document.getElementById('state').classList.add('error'); stErr.classList.add('show'); ok=false; }
+    else { document.getElementById('state').classList.remove('error'); stErr.classList.remove('show'); }
   }
   return ok;
 }
+
+// ── SCORING ──────────────────────────────────────────────────────────────────
+const RELIABILITY_LABELS = [[0,'Excellent'],[10,'Very Good'],[15,'Good'],[20,'Average'],[25,'Below Avg'],[30,'Poor'],[35,'Very Poor']];
+function getReliabilityLabel(s) { let l='Excellent'; for(const [k,v] of RELIABILITY_LABELS){if(s>=k)l=v;} return l; }
+
+function calcScore(year, mileage, make, state, driving, owners, accidents, title, service) {
+  const age = new Date().getFullYear() - year;
+  const ageFactor = age<=2?3:age<=4?8:age<=6?14:age<=10?22:age<=15?29:35;
+  const milageFactor = mileage<20000?4:mileage<50000?10:mileage<80000?17:mileage<120000?26:mileage<160000?34:40;
+  const brandFactor = RELIABILITY[make.toLowerCase()] ?? 23;
+
+  // New factors
+  let historyFactor = 0;
+  if (driving==='city') historyFactor += 8;
+  else if (driving==='mixed') historyFactor += 4;
+  const ownerNum = parseInt(owners) || 1;
+  historyFactor += (ownerNum - 1) * 5;
+  if (accidents==='minor') historyFactor += 10;
+  else if (accidents==='major') historyFactor += 20;
+  else if (accidents==='unknown') historyFactor += 6;
+  if (title==='salvage') historyFactor += 25;
+  else if (title==='rebuilt') historyFactor += 15;
+  else if (title==='lemon') historyFactor += 30;
+  if (service==='none') historyFactor += 10;
+  else if (service==='partial') historyFactor += 5;
+  else if (service==='unknown') historyFactor += 5;
+  if (RUST_BELT.includes(state)) historyFactor += 5;
+
+  const total = Math.min(100, ageFactor + milageFactor + brandFactor + historyFactor);
+  return { total, ageFactor, milageFactor, brandFactor, historyFactor };
+}
+
+function riskLevel(s) { return s<35?'low':s<65?'medium':'high'; }
+function barClass(p)  { return p<35?'low-risk':p<65?'medium-risk':'high-risk'; }
+
+function buildExplanation(make, model, year, mileage, state, sc) {
+  const age = new Date().getFullYear() - year;
+  const parts = [];
+  if (sc.milageFactor>=26) parts.push(`High mileage (${mileage.toLocaleString()} mi) significantly increases wear risk.`);
+  else if (sc.milageFactor>=10) parts.push(`Moderate mileage (${mileage.toLocaleString()} mi) is within normal range.`);
+  else parts.push(`Low mileage (${mileage.toLocaleString()} mi) is a strong positive signal.`);
+  if (sc.ageFactor>=22) parts.push(`At ${age} years old, major repairs may become more common.`);
+  else if (sc.ageFactor>=8) parts.push(`Age (${age} yrs) is a moderate factor — worth a mechanic's check.`);
+  else parts.push(`Relatively new at ${age} years old — age adds minimal risk.`);
+  parts.push(`<strong>${make}</strong> has a reliability rating of <strong>${getReliabilityLabel(sc.brandFactor)}</strong>.`);
+  if (sc.historyFactor > 0) {
+    const flags = [];
+    if (selections.driving==='city') flags.push('city driving');
+    if (selections.driving==='mixed') flags.push('mixed driving');
+    if (parseInt(selections.owners)>1) flags.push(`${selections.owners} previous owner${parseInt(selections.owners)>1?'s':''}`);
+    if (selections.accidents==='minor') flags.push('minor accident');
+    if (selections.accidents==='major') flags.push('major accident');
+    if (selections.title==='salvage') flags.push('salvage title');
+    if (selections.title==='rebuilt') flags.push('rebuilt title');
+    if (selections.title==='lemon') flags.push('lemon law buyback');
+    if (selections.service==='none'||selections.service==='unknown') flags.push('limited service records');
+    if (RUST_BELT.includes(state)) flags.push(`rust belt registration (${state})`);
+    if (flags.length) parts.push(`Additional risk factors: ${flags.join(', ')}.`);
+  }
+  return parts.join(' ');
+}
+
+// ── ANALYZE ──────────────────────────────────────────────────────────────────
 let lastResult = null;
 function analyze() {
-  if (!validate()) return;
   const make    = document.getElementById('make').value;
   const model   = document.getElementById('model').value.trim();
   const year    = parseInt(document.getElementById('year').value);
   const mileage = parseInt(document.getElementById('mileage').value);
-  const vin     = currentVin; // from VIN lookup
-  const scores  = calcScore(year, mileage, make);
-  const level   = riskLevel(scores.total);
-  lastResult    = { make, model, year, mileage, score: scores.total, level, vin };
-  const banner  = document.getElementById('risk-banner');
+  const state   = document.getElementById('state').value;
+  const vin     = currentVin;
+
+  const scores = calcScore(year, mileage, make, state, selections.driving, selections.owners, selections.accidents, selections.title, selections.service);
+  const level  = riskLevel(scores.total);
+  lastResult   = { make, model, year, mileage, state, score: scores.total, level, vin };
+
+  // Show results step
+  currentStep = 4;
+  showStep(4);
+
+  // Banner
+  const banner = document.getElementById('risk-banner');
   banner.className = `risk-banner ${level}`;
   const cfg = {
     low:    { emoji:'✅', label:'Low Risk',    sub:'Looks like a solid buy — still do your due diligence.' },
@@ -551,59 +701,78 @@ function analyze() {
   document.getElementById('risk-dot').textContent   = cfg[level].emoji;
   document.getElementById('risk-label').textContent = cfg[level].label;
   document.getElementById('risk-sub').textContent   = cfg[level].sub;
+
+  // Gauge
   const needleAngle = -90 + (scores.total / 100) * 180;
-  setTimeout(() => { document.getElementById('gauge-needle').style.transform = `rotate(${needleAngle}deg)`; }, 100);
+  document.getElementById('gauge-needle').style.transform = `rotate(-90deg)`;
+  setTimeout(() => { document.getElementById('gauge-needle').style.transform = `rotate(${needleAngle}deg)`; }, 150);
+
+  // Counter
   const numEl = document.getElementById('score-number');
   numEl.classList.remove('show'); numEl.textContent = '0';
   let current = 0;
-  const target = scores.total;
-  const step   = Math.max(1, Math.ceil(target / 40));
+  const step = Math.max(1, Math.ceil(scores.total / 40));
   setTimeout(() => {
     numEl.classList.add('show');
-    const t = setInterval(() => {
-      current = Math.min(current + step, target);
-      numEl.textContent = current;
-      if (current >= target) clearInterval(t);
-    }, 25);
+    const t = setInterval(() => { current = Math.min(current+step, scores.total); numEl.textContent=current; if(current>=scores.total)clearInterval(t); }, 25);
   }, 400);
+
+  // Bars
   function setBar(barId, valId, raw, max, label) {
-    const pct = Math.round((raw / max) * 100);
-    const el  = document.getElementById(barId);
+    const pct = Math.round((raw/max)*100);
+    const el = document.getElementById(barId);
     el.className = `factor-bar ${barClass(pct)}`;
-    setTimeout(() => { el.style.width = pct + '%'; }, 200);
+    setTimeout(() => { el.style.width = pct+'%'; }, 200);
     document.getElementById(valId).textContent = label;
   }
-  setBar('bar-age',     'val-age',     scores.ageFactor,   35, scores.ageFactor<=8?'Low':scores.ageFactor<=22?'Medium':'High');
-  setBar('bar-mileage', 'val-mileage', scores.milageFactor, 40, scores.milageFactor<=10?'Low':scores.milageFactor<=26?'Medium':'High');
-  setBar('bar-brand',   'val-brand',   scores.brandFactor,  35, getReliabilityLabel(scores.brandFactor));
-  document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, scores);
+  setBar('bar-age',     'val-age',     scores.ageFactor,     35, scores.ageFactor<=8?'Low':scores.ageFactor<=22?'Medium':'High');
+  setBar('bar-mileage', 'val-mileage', scores.milageFactor,  40, scores.milageFactor<=10?'Low':scores.milageFactor<=26?'Medium':'High');
+  setBar('bar-brand',   'val-brand',   scores.brandFactor,   35, getReliabilityLabel(scores.brandFactor));
+  setBar('bar-history', 'val-history', scores.historyFactor, 50, scores.historyFactor<=8?'Low':scores.historyFactor<=20?'Medium':'High');
+
+  document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, state, scores);
 
   // VIN chip
   const chip = document.getElementById('vin-chip');
-  if (vin) {
-    document.getElementById('vin-chip-text').textContent = `VIN: ${vin}`;
-    chip.style.display = 'inline-flex';
-  } else {
-    chip.style.display = 'none';
-  }
+  if (vin) { document.getElementById('vin-chip-text').textContent=`VIN: ${vin}`; chip.style.display='inline-flex'; }
+  else chip.style.display='none';
 
-  // Update affiliate links
+  // Affiliate links
   updateAffiliateLinks(vin);
-
-  const resultEl = document.getElementById('result');
-  resultEl.style.display = 'block';
-  requestAnimationFrame(() => resultEl.classList.add('visible'));
   document.getElementById('affiliate').style.display = 'block';
-  setTimeout(() => { resultEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
 }
+
+function updateAffiliateLinks(vin) {
+  const cf = document.getElementById('link-carfax');
+  const ac = document.getElementById('link-autocheck');
+  if (vin) {
+    cf.href = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DEV_0&vin=${vin}`;
+    ac.href = `https://www.autocheck.com/vehiclehistory/search.do?vin=${vin}`;
+    cf.innerHTML = '🛡️ Carfax Report for this VIN';
+    ac.innerHTML = '📋 AutoCheck Report for this VIN';
+  } else {
+    cf.href = 'https://www.carfax.com'; ac.href = 'https://www.autocheck.com';
+    cf.innerHTML = '🛡️ Check on Carfax'; ac.innerHTML = '📋 Check on AutoCheck';
+  }
+}
+
+function startOver() {
+  currentStep = 1;
+  showStep(1);
+  document.getElementById('affiliate').style.display = 'none';
+  document.getElementById('score-number').classList.remove('show');
+  document.getElementById('gauge-needle').style.transform = 'rotate(-90deg)';
+  document.querySelectorAll('.factor-bar').forEach(b => b.style.width='0');
+  document.getElementById('progress-wrap').style.display = 'block';
+}
+
 function shareResult() {
   if (!lastResult) return;
   const { make, model, year, mileage, score, level, vin } = lastResult;
   const vinPart = vin ? ` | VIN: ${vin}` : '';
   const text = `🍋 Lemonhead Risk Score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${level.toUpperCase()} RISK. Try it free at lemonhead.app`;
-  if (navigator.share) {
-    navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
-  } else { copyText(text); }
+  if (navigator.share) navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
+  else copyText(text);
 }
 function copyText(text) {
   navigator.clipboard.writeText(text).then(() => {
@@ -612,18 +781,16 @@ function copyText(text) {
     setTimeout(() => { btn.innerHTML = '🔗 Share This Result'; }, 2500);
   }).catch(() => alert('Copy this:\n\n' + text));
 }
-['make','model','year','mileage'].forEach(id => {
-  document.getElementById(id).addEventListener('input', () => {
-    document.getElementById(id).classList.remove('error');
+
+// Clear errors on input
+['make','model','year','mileage','state'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => {
+    el.classList.remove('error');
     const e = document.getElementById('err-'+id);
     if (e) e.classList.remove('show');
   });
 });
-// Also wire VIN field clear events
-document.getElementById('vin').addEventListener('input', () => {
-  document.getElementById('vin').classList.remove('error');
-});
-document.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
 </script>
 </body>
 </html>
