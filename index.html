@@ -597,7 +597,7 @@ let vinDebounceTimer = null;
 const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full', trim: '' };
 
 // ── MAKES & MODELS ───────────────────────────────────────────────────────────
-const MAKES = ['Acura','Audi','BMW','Buick','Cadillac','Chevrolet','Chrysler','Dodge','Ford','GMC','Honda','Hyundai','Infiniti','Jeep','Kia','Lexus','Lincoln','Mazda','Mercedes-Benz','Mitsubishi','Nissan','Ram','Subaru','Toyota','Volkswagen','Volvo','Other'].sort((a,b) => a==='Other'?1:b==='Other'?-1:a.localeCompare(b));
+const MAKES = ['Acura','Alfa Romeo','Audi','BMW','Buick','Cadillac','Chevrolet','Chrysler','Dodge','FIAT','Ford','Genesis','GMC','Honda','Hyundai','Infiniti','Jeep','Kia','Land Rover','Lexus','Lincoln','Mazda','Mercedes-Benz','Mercury','Mini','Mitsubishi','Nissan','Pontiac','Porsche','Ram','Rivian','Saturn','Scion','Subaru','Tesla','Toyota','Volkswagen','Volvo','Other'].sort((a,b) => a==='Other'?1:b==='Other'?-1:a.localeCompare(b));
 
 const MODEL_SUGGESTIONS = {
   'Acura':['ILX','MDX','NSX','RDX','RLX','TLX'],
@@ -626,6 +626,18 @@ const MODEL_SUGGESTIONS = {
   'Toyota':['4Runner','Avalon','Camry','Corolla','Highlander','Land Cruiser','Prius','RAV4','Sequoia','Sienna','Tacoma','Tundra','Venza'],
   'Volkswagen':['Arteon','Atlas','Golf','GTI','ID.4','Jetta','Passat','Tiguan'],
   'Volvo':['S60','S90','V60','XC40','XC60','XC90'],
+  'Tesla':['Model 3','Model Y','Model S','Model X','Cybertruck'],
+  'Genesis':['G70','G80','G90','GV70','GV80','GV90'],
+  'Mini':['Cooper','Cooper S','Countryman','Clubman','Paceman','Convertible'],
+  'Land Rover':['Defender','Discovery','Discovery Sport','Freelander','Range Rover','Range Rover Evoque','Range Rover Sport','Range Rover Velar'],
+  'Pontiac':['Aztek','Bonneville','Firebird','G6','G8','Grand Am','Grand Prix','Montana','Solstice','Torrent','Vibe'],
+  'Scion':['FR-S','iA','iM','iQ','tC','xA','xB','xD'],
+  'Rivian':['R1S','R1T'],
+  'Porsche':['718 Boxster','718 Cayman','911','Cayenne','Macan','Panamera','Taycan'],
+  'FIAT':['124 Spider','500','500L','500X','Tipo'],
+  'Alfa Romeo':['4C','Giulia','Giulietta','Stelvio','Tonale'],
+  'Saturn':['Aura','Ion','Outlook','Sky','Vue'],
+  'Mercury':['Grand Marquis','Mariner','Milan','Mountaineer','Sable'],
   'Other':[]
 };
 
@@ -633,7 +645,10 @@ const RELIABILITY = {
   'toyota':5,'lexus':7,'honda':8,'acura':10,'mazda':9,'subaru':13,'hyundai':14,'kia':15,
   'nissan':17,'mitsubishi':18,'volkswagen':20,'buick':19,'chevrolet':21,'gmc':21,'ford':22,
   'ram':22,'volvo':21,'infiniti':18,'bmw':27,'audi':28,'mercedes-benz':25,'cadillac':27,
-  'lincoln':25,'jeep':31,'dodge':32,'chrysler':35,'other':23
+  'lincoln':25,'jeep':31,'dodge':32,'chrysler':35,
+  'tesla':22,'genesis':12,'mini':24,'land rover':32,'pontiac':26,'scion':8,
+  'rivian':28,'porsche':20,'fiat':30,'alfa romeo':31,'saturn':22,'mercury':24,
+  'other':23
 };
 
 const RUST_BELT = ['Michigan','Ohio','New York','Pennsylvania','Indiana','Illinois','Wisconsin','Minnesota'];
@@ -895,18 +910,34 @@ const BASE_PRICES = {
   'mitsubishi': {
     'outlander':28000,'eclipse cross':26000,'outlander sport':24000,'mirage':16000,'default':24000
   },
-  'other': { 'default': 28000 }
+  'other': { 'default': 28000 },
+  'tesla': { 'model 3':42000,'model y':47000,'model s':89000,'model x':98000,'cybertruck':80000,'default':50000 },
+  'genesis': { 'g70':38000,'g80':48000,'g90':72000,'gv70':42000,'gv80':52000,'default':45000 },
+  'mini': { 'cooper':28000,'cooper s':32000,'countryman':34000,'clubman':30000,'default':29000 },
+  'land rover': { 'defender':56000,'discovery':56000,'discovery sport':42000,'range rover':94000,'range rover sport':68000,'range rover evoque':46000,'range rover velar':58000,'default':58000 },
+  'pontiac': { 'g6':24000,'g8':30000,'grand prix':26000,'grand am':22000,'solstice':26000,'vibe':20000,'aztek':22000,'default':22000 },
+  'scion': { 'tc':20000,'xb':18000,'fr-s':26000,'ia':18000,'im':20000,'default':20000 },
+  'rivian': { 'r1t':73000,'r1s':78000,'default':75000 },
+  'porsche': { '911':106000,'cayenne':74000,'macan':58000,'panamera':90000,'taycan':104000,'718 boxster':62000,'718 cayman':62000,'default':78000 },
+  'fiat': { '500':20000,'500x':26000,'500l':24000,'124 spider':26000,'default':22000 },
+  'alfa romeo': { 'giulia':44000,'stelvio':46000,'tonale':42000,'4c':56000,'default':44000 },
+  'saturn': { 'vue':22000,'ion':18000,'aura':24000,'outlook':28000,'sky':26000,'default':22000 },
+  'mercury': { 'grand marquis':28000,'mountaineer':30000,'mariner':26000,'milan':22000,'sable':24000,'default':24000 }
 };
 
 // Depreciation curve: calibrated from 7 real-world test data points vs Carfax
-function getDepreciationFactor(age, mileage) {
+function getDepreciationFactor(age, mileage, make) {
   const ageFactors = [1.00,0.85,0.78,0.73,0.69,0.65,0.61,0.57,0.54,0.51,0.48,0.44,0.40,0.36,0.32,0.28];
   const ageFactor = age >= ageFactors.length ? 0.25 : ageFactors[Math.min(age, ageFactors.length-1)];
+
+  // EV drivetrains last longer — reduce mileage penalty by 30% for Tesla/Rivian
+  const isEV = make && ['tesla','rivian'].includes(make.toLowerCase());
+  const penaltyMult = isEV ? 0.70 : 1.0;
 
   // Mileage adjustment: $0.12/mile penalty over 12k/yr average, $0.04/mile credit under
   const expectedMiles = age * 12000;
   const mileDiff = mileage - expectedMiles;
-  const mileAdj = mileDiff > 0 ? -mileDiff * 0.00012 : -mileDiff * 0.00004;
+  const mileAdj = mileDiff > 0 ? -(mileDiff * 0.00012 * penaltyMult) : -mileDiff * 0.00004;
   const mileAdjCapped = Math.max(-0.20, Math.min(0.10, mileAdj));
 
   return Math.max(0.08, ageFactor + mileAdjCapped);
@@ -940,13 +971,13 @@ function getBasePrice(make, model) {
 function estimateMarketValue(make, model, year, mileage, accidents, title, service, trim) {
   const age = new Date().getFullYear() - year;
   const base = getBasePrice(make, model);
-  const depr = getDepreciationFactor(age, mileage);
+  const depr = getDepreciationFactor(age, mileage, make);
   const cond = getConditionMultiplier(accidents, title, service);
   let estimate = Math.round(base * depr * cond / 100) * 100;
 
   // Luxury brand depreciation cliff — steep value drop after warranty expiry
   // Lexus and Acura excluded — Japanese luxury holds value like mainstream
-  const LUXURY_BRANDS = ['bmw','audi','mercedes-benz','cadillac','lincoln','infiniti','volvo'];
+  const LUXURY_BRANDS = ['bmw','audi','mercedes-benz','cadillac','lincoln','infiniti','volvo','land rover','porsche'];
   if (LUXURY_BRANDS.includes(make.toLowerCase())) {
     let luxMult = 1.0;
     if      (age >= 16) luxMult = 0.45;
