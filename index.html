@@ -160,6 +160,38 @@ input.error, select.error { border-color: var(--red); }
 .explanation strong { color: var(--navy); }
 .vin-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--off-white); border: 1px solid var(--gray-100); border-radius: 6px; padding: 4px 10px; font-size: 12px; font-family: monospace; color: var(--gray-500); margin-bottom: 16px; letter-spacing: 0.5px; }
 
+/* CELEBRATION BANNER */
+.celebrate-banner { display: none; background: var(--navy); border-radius: var(--radius-sm); padding: 12px 18px; margin-bottom: 18px; text-align: center; }
+.celebrate-banner.show { display: block; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes popIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+.celebrate-banner span { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #F5C842; letter-spacing: -0.3px; }
+
+/* BUY VERDICT */
+.buy-verdict { border-radius: var(--radius-sm); padding: 18px 20px; margin-top: 16px; }
+.buy-verdict.confident { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+.buy-verdict.negotiate { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
+.buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
+.buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
+.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 5px; }
+.confident .buy-verdict-title { color: #15803D; }
+.negotiate .buy-verdict-title { color: #1D4ED8; }
+.inspect   .buy-verdict-title { color: #A16207; }
+.caution   .buy-verdict-title { color: #C2410C; }
+.walkaway  .buy-verdict-title { color: #BE123C; }
+.buy-verdict-body { font-size: 13px; color: var(--gray-500); line-height: 1.55; }
+
+/* NEGOTIATION TIPS */
+.tips-wrap { margin-top: 16px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
+.tips-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; }
+.tips-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
+.tips-chevron { font-size: 12px; color: var(--gray-500); transition: transform 0.25s; }
+.tips-chevron.open { transform: rotate(180deg); }
+.tips-body { padding: 4px 16px 14px; background: var(--off-white); }
+.tip-item { font-size: 13px; color: var(--gray-500); line-height: 1.6; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+.tip-item:last-child { border-bottom: none; }
+.tip-item strong { color: var(--navy); }
+
 /* AFFILIATE */
 .affiliate-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius); padding: 28px; color: var(--white); margin-bottom: 16px; }
 .affiliate-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; letter-spacing: -0.5px; }
@@ -391,12 +423,13 @@ footer a { color: var(--gray-300); }
 
   <!-- STEP 4: RESULTS -->
   <div class="card step-panel" id="step-4">
+    <div class="celebrate-banner" id="celebrate-banner"><span>You might have found a good one! 🎉</span></div>
     <div class="card-title"><div class="icon">🍋</div>Lemon Index</div>
     <div id="vin-chip" class="vin-chip" style="display:none;">🔍 <span id="vin-chip-text"></span></div>
-    <div id="risk-banner" class="risk-banner low">
-      <div class="risk-dot" id="risk-dot">✅</div>
+    <div id="risk-banner" class="risk-banner fresh">
+      <div class="risk-dot" id="risk-dot">🍋</div>
       <div>
-        <div class="risk-label" id="risk-label">Low Risk</div>
+        <div class="risk-label" id="risk-label">Fresh Squeezed</div>
         <div class="risk-sub" id="risk-sub">—</div>
       </div>
     </div>
@@ -416,6 +449,8 @@ footer a { color: var(--gray-300); }
     <div class="factor-row"><span class="factor-label">Reliability</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div><span class="factor-val" id="val-brand">—</span></div>
     <div class="factor-row"><span class="factor-label">History</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-history"></div></div><span class="factor-val" id="val-history">—</span></div>
     <div class="explanation" id="explanation"></div>
+    <div id="buy-verdict-wrap"></div>
+    <div id="tips-wrap-outer"></div>
     <div id="price-verdict-wrap" style="display:none;"></div>
     <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
     <div style="display:flex;gap:10px;margin-top:12px;">
@@ -914,6 +949,85 @@ function riskLabel(level) {
   return { fresh:'Fresh Squeezed', ripe:'Ripe', turning:'Turning', sour:'Gone Sour', lemon:'Full Lemon' }[level];
 }
 
+// ── BUY VERDICT ──────────────────────────────────────────────────────────────
+function getBuyVerdict(score, priceClass) {
+  const overpriced = priceClass === 'high' || priceClass === 'danger';
+  if (score <= 40 && !overpriced) return { cls:'confident', text:'✅ Buy with Confidence', body:'Low risk, fair price. This one looks solid.' };
+  if (score <= 40 && overpriced)  return { cls:'negotiate', text:'💰 Negotiate the Price', body:'Good car but overpriced. Use the market estimate as leverage.' };
+  if (score <= 60)                return { cls:'inspect',   text:'🔍 Buy with Inspection', body:'Some concerns. Get a mechanic to check it before committing.' };
+  if (score <= 80)                return { cls:'caution',   text:'⚠️ Proceed with Caution', body:'Significant red flags. Do your homework before handing over money.' };
+  return                               { cls:'walkaway',  text:'🚫 Walk Away', body:"Too many issues at this price. We'd hate to see you get burned." };
+}
+
+function renderBuyVerdict(score, priceClass) {
+  const v = getBuyVerdict(score, priceClass);
+  document.getElementById('buy-verdict-wrap').innerHTML = `
+    <div class="buy-verdict ${v.cls}">
+      <div class="buy-verdict-title">${v.text}</div>
+      <div class="buy-verdict-body">${v.body}</div>
+    </div>`;
+  return v.cls;
+}
+
+// ── NEGOTIATION TIPS ─────────────────────────────────────────────────────────
+function renderNegotiationTips(score, mileage, priceClass, estimatedValue, askingPrice) {
+  const tips = [];
+  const level = riskLevel(score);
+  if (askingPrice && estimatedValue && askingPrice > estimatedValue * 1.10) {
+    tips.push(`<strong>Priced above market.</strong> Mention comparable listings and offer closer to $${(Math.round(estimatedValue/100)*100).toLocaleString()}.`);
+  }
+  if (mileage > 100000) {
+    tips.push(`<strong>High mileage is leverage.</strong> Ask for a lower price or request the seller include an extended warranty.`);
+  }
+  if (selections.accidents === 'minor' || selections.accidents === 'major') {
+    tips.push(`<strong>Prior accident history</strong> typically reduces value by 10–20%. Use this to justify a lower offer.`);
+  }
+  if (selections.service === 'partial' || selections.service === 'none') {
+    tips.push(`<strong>Missing service records</strong> increase uncertainty. Factor in potential maintenance costs when making your offer.`);
+  }
+  if (selections.title === 'rebuilt' || selections.title === 'salvage') {
+    tips.push(`<strong>Rebuilt/salvage title</strong> significantly reduces resale value. Make sure your offer reflects this — and check if your insurance will cover it.`);
+  }
+  if ((level==='fresh'||level==='ripe') && (priceClass==='fair'||priceClass==='great') && tips.length===0) {
+    tips.push(`<strong>This car is priced fairly and in good shape.</strong> You have less leverage to negotiate — focus on confirming the history report instead.`);
+  }
+  if (tips.length === 0) { document.getElementById('tips-wrap-outer').innerHTML = ''; return; }
+  const tipsHTML = tips.map(t => `<div class="tip-item">${t}</div>`).join('');
+  document.getElementById('tips-wrap-outer').innerHTML = `
+    <div class="tips-wrap">
+      <div class="tips-header" onclick="toggleTips(this)">
+        <span class="tips-header-title">💡 Negotiation Tips</span>
+        <span class="tips-chevron open">▾</span>
+      </div>
+      <div class="tips-body">${tipsHTML}</div>
+    </div>`;
+}
+
+function toggleTips(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.tips-chevron');
+  const isOpen = chevron.classList.contains('open');
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// ── DYNAMIC AFFILIATE CTA ─────────────────────────────────────────────────────
+function updateAffiliateCTA(score) {
+  const h2 = document.querySelector('#affiliate h2');
+  const p  = document.querySelector('#affiliate p');
+  if (!h2 || !p) return;
+  if (score <= 40) {
+    h2.textContent = 'Looks Promising!';
+    p.textContent  = 'Confirm it with a history report and lock in that deal — make sure there are no hidden surprises.';
+  } else if (score <= 60) {
+    h2.textContent = 'Worth Verifying';
+    p.textContent  = 'This car has some concerns. A full history report will tell you exactly what you\'re dealing with.';
+  } else {
+    h2.textContent = 'Think it might be a lemon?';
+    p.textContent  = 'Get the full story before someone squeezes you. A vehicle history report reveals accidents, title issues, odometer fraud, and more.';
+  }
+}
+
 function buildExplanation(make, model, year, mileage, state, sc) {
   const age = new Date().getFullYear() - year;
   const parts = [];
@@ -1004,8 +1118,35 @@ function analyze() {
 
   document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, state, scores);
 
-  // Price verdict
+  // Price verdict — capture priceClass for buy verdict
+  let priceClass = null;
+  let estimatedValue = null;
+  if (askingPrice > 0) {
+    const mv = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service);
+    estimatedValue = mv.estimate;
+    const pct = askingPrice / mv.estimate;
+    if (pct < 0.75)       priceClass = 'danger';
+    else if (pct < 0.90)  priceClass = 'great';
+    else if (pct <= 1.10) priceClass = 'fair';
+    else if (pct <= 1.25) priceClass = 'high';
+    else                  priceClass = 'danger';
+  }
   renderPriceVerdict(askingPrice, make, model, year, mileage);
+
+  // Buy verdict
+  const verdictCls = renderBuyVerdict(scores.total, priceClass);
+
+  // Negotiation tips
+  renderNegotiationTips(scores.total, mileage, priceClass, estimatedValue, askingPrice);
+
+  // Celebration banner
+  const celebrate = document.getElementById('celebrate-banner');
+  const isGoodDeal = scores.total <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
+  celebrate.classList.toggle('show', isGoodDeal);
+
+  // Store priceClass for share
+  lastResult.priceClass = priceClass;
+  lastResult.verdictCls = verdictCls;
 
   // VIN chip
   const chip = document.getElementById('vin-chip');
@@ -1014,6 +1155,7 @@ function analyze() {
 
   // Affiliate links
   updateAffiliateLinks(vin);
+  updateAffiliateCTA(scores.total);
   document.getElementById('affiliate').style.display = 'block';
 }
 
@@ -1036,6 +1178,9 @@ function startOver() {
   showStep(1);
   document.getElementById('affiliate').style.display = 'none';
   document.getElementById('price-verdict-wrap').style.display = 'none';
+  document.getElementById('buy-verdict-wrap').innerHTML = '';
+  document.getElementById('tips-wrap-outer').innerHTML = '';
+  document.getElementById('celebrate-banner').classList.remove('show');
   document.getElementById('score-number').classList.remove('show');
   document.getElementById('gauge-needle').style.transform = 'rotate(-90deg)';
   document.querySelectorAll('.factor-bar').forEach(b => b.style.width='0');
@@ -1044,9 +1189,12 @@ function startOver() {
 
 function shareResult() {
   if (!lastResult) return;
-  const { make, model, year, mileage, score, level, vin } = lastResult;
+  const { make, model, year, mileage, score, level, vin, priceClass } = lastResult;
   const vinPart = vin ? ` | VIN: ${vin}` : '';
-  const text = `🍋 Lemonhead score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${riskLabel(level)}. Check your car free at lemonhead.app`;
+  const isGoodShare = score <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
+  const text = isGoodShare
+    ? `🎉 Found a good one! ${year} ${make} ${model} scored ${score}/100 on Lemonhead — ${riskLabel(level)}. Check your car free at lemonhead.app`
+    : `🍋 Lemonhead score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${riskLabel(level)}. Check your car free at lemonhead.app`;
   if (navigator.share) navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
   else copyText(text);
 }
