@@ -69,7 +69,8 @@ main { max-width: 680px; margin: -32px auto 0; padding: 0 16px 64px; position: r
 @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 500px) { .card { padding: 22px 16px; } }
 @media (max-width: 380px) {
-  .buy-verdict-title { font-size: 18px !important; }
+  .score-hero-label { font-size: 24px; }
+  .score-hero-emoji { font-size: 40px; }
   .pills-row { gap: 6px; }
   .pill { padding: 7px 8px; }
   .pill-label { font-size: 10px; }
@@ -141,34 +142,63 @@ input.error, select.error { border-color: var(--red); }
 .btn-back:hover { border-color: var(--gray-300); color: var(--navy); }
 
 /* RESULTS */
-.risk-banner { border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
-.risk-banner.fresh   { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
-.risk-banner.ripe    { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
-.risk-banner.turning { background: #FEFCE8; border: 1.5px solid #FEF08A; }
-.risk-banner.sour    { background: #FFF7ED; border: 1.5px solid #FED7AA; }
-.risk-banner.lemon   { background: #FFF1F2; border: 1.5px solid #FECDD3; }
-.risk-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.fresh   .risk-dot { background: #DCFCE7; }
-.ripe    .risk-dot { background: #DBEAFE; }
-.turning .risk-dot { background: #FEF9C3; }
-.sour    .risk-dot { background: #FFEDD5; }
-.lemon   .risk-dot { background: #FFE4E6; }
-.risk-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
-.fresh   .risk-label { color: #15803D; }
-.ripe    .risk-label { color: #1D4ED8; }
-.turning .risk-label { color: #A16207; }
-.sour    .risk-label { color: #C2410C; }
-.lemon   .risk-label { color: #BE123C; }
-.risk-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
-.score-wrap { text-align: center; margin-bottom: 22px; }
-.gauge-container { position: relative; width: 180px; height: 100px; margin: 0 auto 12px; overflow: hidden; }
-.gauge-bg { width: 180px; height: 180px; border-radius: 90px 90px 0 0; background: conic-gradient(from 180deg, var(--green) 0deg 60deg, var(--yellow) 60deg 120deg, var(--red) 120deg 180deg); position: absolute; bottom: 0; left: 0; }
-.gauge-cover { width: 140px; height: 140px; background: var(--white); border-radius: 50%; position: absolute; bottom: -70px; left: 20px; }
-.gauge-needle { width: 3px; height: 70px; background: var(--navy); border-radius: 3px 3px 0 0; position: absolute; bottom: 0; left: calc(50% - 1.5px); transform-origin: bottom center; transform: rotate(-90deg); transition: transform 1.2s cubic-bezier(0.34,1.56,0.64,1); }
-.gauge-center { width: 12px; height: 12px; background: var(--navy); border-radius: 50%; position: absolute; bottom: -6px; left: calc(50% - 6px); }
-.score-number { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 48px; line-height: 1; color: var(--navy); letter-spacing: -2px; opacity: 0; transition: opacity 0.4s 0.6s; }
-.score-number.show { opacity: 1; }
-.score-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.4s ease-out both; }
+.delay-0  { animation-delay: 0s; }
+.delay-1  { animation-delay: 0.1s; }
+.delay-2  { animation-delay: 0.2s; }
+.delay-25 { animation-delay: 0.25s; }
+.delay-3  { animation-delay: 0.3s; }
+
+/* SCORE HERO */
+.score-hero { border-radius: var(--radius-sm); padding: 24px 20px 20px; text-align: center; margin-bottom: 16px; }
+.score-hero.fresh   { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+.score-hero.ripe    { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.score-hero.turning { background: #FEFCE8; border: 1.5px solid #FEF08A; }
+.score-hero.sour    { background: #FFF7ED; border: 1.5px solid #FED7AA; }
+.score-hero.lemon   { background: #FFF1F2; border: 1.5px solid #FECDD3; }
+.score-hero-emoji   { font-size: 48px; line-height: 1.2; display: block; }
+.score-hero-label   { font-family: 'Syne', 'DM Sans', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 36px); line-height: 1.15; margin: 8px 0 4px; padding: 0 4px; word-break: break-word; }
+.score-hero.fresh   .score-hero-label { color: #15803D; }
+.score-hero.ripe    .score-hero-label { color: #1D4ED8; }
+.score-hero.turning .score-hero-label { color: #A16207; }
+.score-hero.sour    .score-hero-label { color: #C2410C; }
+.score-hero.lemon   .score-hero-label { color: #BE123C; }
+.score-hero-num  { font-size: 14px; color: var(--gray-500); margin-bottom: 4px; }
+.score-hero-sub  { font-size: 13px; color: var(--gray-500); font-style: italic; margin-bottom: 14px; }
+.score-hero-bar-wrap { height: 6px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; }
+.score-hero-bar { height: 100%; border-radius: 3px; width: 0; transition: width 1s cubic-bezier(0.16,1,0.3,1) 0.3s; }
+.score-hero.fresh   .score-hero-bar,
+.score-hero.ripe    .score-hero-bar { background: #22C55E; }
+.score-hero.turning .score-hero-bar { background: #F59E0B; }
+.score-hero.sour    .score-hero-bar { background: #F97316; }
+.score-hero.lemon   .score-hero-bar { background: #FB7185; }
+
+/* CELEBRATION BANNER */
+.celebrate-banner { display: none; background: var(--navy); border-radius: var(--radius-sm); padding: 12px 18px; margin-bottom: 16px; text-align: center; }
+.celebrate-banner.show { display: block; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes popIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+.celebrate-banner span { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5C842; }
+
+/* BUY VERDICT (demoted — smaller) */
+.buy-verdict { border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 0; }
+.buy-verdict.confident { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+.buy-verdict.negotiate { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
+.buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
+.buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
+.buy-verdict-title { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 16px; margin-bottom: 3px; line-height: 1.3; word-break: break-word; }
+.confident .buy-verdict-title { color: #15803D; }
+.negotiate .buy-verdict-title { color: #1D4ED8; }
+.inspect   .buy-verdict-title { color: #A16207; }
+.caution   .buy-verdict-title { color: #C2410C; }
+.walkaway  .buy-verdict-title { color: #BE123C; }
+.buy-verdict-body { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+/* FACTOR BARS (in breakdown) */
 .breakdown-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.6px; }
 .factor-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
 .factor-label { flex: 0 0 100px; color: var(--gray-500); font-size: 12px; }
@@ -182,31 +212,9 @@ input.error, select.error { border-color: var(--red); }
 .explanation strong { color: var(--navy); }
 .vin-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--off-white); border: 1px solid var(--gray-100); border-radius: 6px; padding: 4px 10px; font-size: 12px; font-family: monospace; color: var(--gray-500); margin-bottom: 16px; letter-spacing: 0.5px; }
 
-/* CELEBRATION BANNER */
-.celebrate-banner { display: none; background: var(--navy); border-radius: var(--radius-sm); padding: 12px 18px; margin-bottom: 18px; text-align: center; }
-.celebrate-banner.show { display: block; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
-@keyframes popIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
-.celebrate-banner span { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5C842; letter-spacing: 0; }
-
-/* BUY VERDICT */
-.buy-verdict { border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 0; }
-.buy-verdict.confident { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
-.buy-verdict.negotiate { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
-.buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
-.buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
-.buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
-.buy-verdict-title { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: clamp(18px, 4vw, 24px); margin-bottom: 4px; letter-spacing: -0.2px; line-height: 1.25; word-break: break-word; }
-.confident .buy-verdict-title { color: #15803D; }
-.negotiate .buy-verdict-title { color: #1D4ED8; }
-.inspect   .buy-verdict-title { color: #A16207; }
-.caution   .buy-verdict-title { color: #C2410C; }
-.walkaway  .buy-verdict-title { color: #BE123C; }
-.buy-verdict-body { font-size: 14px; color: var(--gray-500); line-height: 1.55; margin-bottom: 6px; }
-.buy-verdict-score { font-size: 12px; color: var(--gray-300); font-style: italic; }
-
 /* NEGOTIATION TIPS */
-.tips-wrap { margin-top: 16px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
-.tips-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; }
+.tips-wrap { margin-top: 16px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: visible; }
+.tips-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; border-radius: var(--radius-sm); }
 .tips-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
 .tips-chevron { font-size: 12px; color: var(--gray-500); transition: transform 0.25s; }
 .tips-chevron.open { transform: rotate(180deg); }
@@ -261,8 +269,8 @@ footer a { color: var(--gray-300); }
 .cta-trust { font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 10px; }
 
 /* COLLAPSIBLE BREAKDOWN */
-.breakdown-wrap { margin-top: 12px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
-.breakdown-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; }
+.breakdown-wrap { margin-top: 12px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: visible; }
+.breakdown-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; border-radius: var(--radius-sm); }
 .breakdown-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
 .breakdown-chevron { font-size: 12px; color: var(--gray-500); transition: transform 0.25s; }
 .breakdown-chevron.open { transform: rotate(180deg); }
@@ -479,10 +487,20 @@ footer a { color: var(--gray-300); }
 
   <!-- STEP 4: RESULTS -->
   <div class="card step-panel" id="step-4">
+
+    <!-- CELEBRATION BANNER -->
     <div class="celebrate-banner" id="celebrate-banner"><span>You might have found a good one! 🎉</span></div>
 
-    <!-- S1: VERDICT HERO -->
-    <div id="buy-verdict-wrap"></div>
+    <!-- S1: SCORE HERO -->
+    <div class="score-hero" id="score-hero">
+      <span class="score-hero-emoji fade-up delay-0" id="score-hero-emoji">🍋</span>
+      <div class="score-hero-label fade-up delay-1" id="score-hero-label">—</div>
+      <div class="score-hero-num fade-up delay-2" id="score-hero-num">Score: —/100</div>
+      <div class="score-hero-sub fade-up delay-25" id="score-hero-sub"></div>
+      <div class="score-hero-bar-wrap fade-up delay-3">
+        <div class="score-hero-bar" id="score-hero-bar"></div>
+      </div>
+    </div>
 
     <!-- S2: PRICE GAP ALERT -->
     <div class="price-gap-alert" id="price-gap-alert">
@@ -496,7 +514,10 @@ footer a { color: var(--gray-300); }
       <div class="pill" id="pill-reliability"><span class="pill-label">Reliability</span><span class="pill-val" id="pill-reliability-val">—</span></div>
     </div>
 
-    <!-- S4: INLINE CTA -->
+    <!-- S4: BUY VERDICT (demoted) -->
+    <div id="buy-verdict-wrap"></div>
+
+    <!-- S5: INLINE CTA -->
     <div class="inline-cta" id="inline-cta">
       <h3 id="cta-headline">Confirm it before you commit.</h3>
       <a id="link-carfax" href="https://www.carfax.com" target="_blank" rel="noopener" class="btn-carfax-primary">🛡️ Get Carfax Report</a>
@@ -504,13 +525,13 @@ footer a { color: var(--gray-300); }
       <div class="cta-trust">Reports from $39.99 · Instant access · Used by millions of buyers</div>
     </div>
 
-    <!-- S5: PRICE VERDICT -->
+    <!-- S6: PRICE VERDICT -->
     <div id="price-verdict-wrap" style="display:none;"></div>
 
-    <!-- S6: NEGOTIATION TIPS (collapsed) -->
+    <!-- S7: NEGOTIATION TIPS (collapsed) -->
     <div id="tips-wrap-outer"></div>
 
-    <!-- S7: FULL BREAKDOWN (collapsed) -->
+    <!-- S8: FULL BREAKDOWN (collapsed) -->
     <div class="breakdown-wrap" id="breakdown-wrap" style="display:none;">
       <div class="breakdown-header" onclick="toggleBreakdown(this)">
         <span class="breakdown-header-title">📊 Full Risk Breakdown</span>
@@ -528,7 +549,7 @@ footer a { color: var(--gray-300); }
       </div>
     </div>
 
-    <!-- S8: SHARE + NAV -->
+    <!-- S9: SHARE + NAV -->
     <button class="btn-share" onclick="shareResult()" style="margin-top:16px;">🔗 Share This Result</button>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="btn-back" onclick="goBack(4)" style="flex:1">← Edit Answers</button>
@@ -536,7 +557,7 @@ footer a { color: var(--gray-300); }
     </div>
   </div>
 
-  <!-- AFFILIATE CARD (hidden — CTA now inline above) -->
+  <!-- AFFILIATE (hidden — CTA inline above) -->
   <div id="affiliate" style="display:none;">
     <h2 id="affiliate-h2"></h2>
     <p id="affiliate-p"></p>
@@ -1103,15 +1124,37 @@ function getBuyVerdict(score, priceClass) {
 function renderBuyVerdict(score, priceClass, level) {
   const v = getBuyVerdict(score, priceClass);
   document.getElementById('buy-verdict-wrap').innerHTML = `
-    <div class="buy-verdict ${v.cls}">
+    <div class="buy-verdict ${v.cls}" style="margin-top:12px;">
       <div class="buy-verdict-title">${v.text}</div>
       <div class="buy-verdict-body">${v.body}</div>
-      <div class="buy-verdict-score">Lemon Index: ${score}/100 — ${riskLabel(level)}</div>
     </div>`;
   return v.cls;
 }
 
-// ── NEGOTIATION TIPS ─────────────────────────────────────────────────────────
+// ── SCORE HERO ────────────────────────────────────────────────────────────────
+const VERDICT_CONFIG = {
+  fresh:   { emoji:'🍋', label:'Fresh Squeezed', sub:'Excellent shape — still do your due diligence.' },
+  ripe:    { emoji:'🍋', label:'Ripe',            sub:'A decent buy — minor concerns worth checking.' },
+  turning: { emoji:'🍋', label:'Turning',         sub:'Proceed carefully. Get a mechanic inspection.' },
+  sour:    { emoji:'🍋', label:'Gone Sour',       sub:'Significant red flags. Be very cautious.' },
+  lemon:   { emoji:'🍋', label:'Full Lemon',      sub:'Walk away. Serious risk of a bad deal.' },
+};
+
+function renderScoreHero(score, level) {
+  const cfg = VERDICT_CONFIG[level];
+  const hero = document.getElementById('score-hero');
+  hero.className = `score-hero ${level}`;
+  document.getElementById('score-hero-emoji').textContent  = cfg.emoji;
+  document.getElementById('score-hero-label').textContent  = cfg.label;
+  document.getElementById('score-hero-num').textContent    = `Score: ${score}/100`;
+  document.getElementById('score-hero-sub').textContent    = cfg.sub;
+  // Trigger bar animation after a short delay
+  const bar = document.getElementById('score-hero-bar');
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = score + '%'; }, 350);
+}
+
+
 function renderNegotiationTips(score, mileage, priceClass, estimatedValue, askingPrice) {
   const tips = [];
   const level = riskLevel(score);
@@ -1229,13 +1272,12 @@ function analyze() {
   currentStep = 4;
   showStep(4);
 
-  // S1: Verdict hero
-  const verdictCls = renderBuyVerdict(scores.total, priceClass, level);
-  lastResult.verdictCls = verdictCls;
+  // S1: Score hero
+  renderScoreHero(scores.total, level);
 
-  // Celebration
-  const isGoodDeal = scores.total <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
-  document.getElementById('celebrate-banner').classList.toggle('show', isGoodDeal);
+  // Celebration — score only (fresh or ripe)
+  const isCelebrate = level === 'fresh' || level === 'ripe';
+  document.getElementById('celebrate-banner').classList.toggle('show', isCelebrate);
 
   // S2: Price gap alert
   renderPriceGapAlert(askingPrice, estimatedValue);
@@ -1243,7 +1285,11 @@ function analyze() {
   // S3: Pills
   renderPills(scores);
 
-  // S4: Inline CTA
+  // S4: Buy verdict (demoted)
+  const verdictCls = renderBuyVerdict(scores.total, priceClass, level);
+  lastResult.verdictCls = verdictCls;
+
+  // S5: Inline CTA
   updateInlineCTA(scores.total, askingPrice, make, model, year, vin);
 
   // S5: Price verdict
@@ -1296,7 +1342,8 @@ function startOver() {
   document.getElementById('tips-wrap-outer').innerHTML = '';
   document.getElementById('price-gap-alert').classList.remove('show');
   document.getElementById('celebrate-banner').classList.remove('show');
-  document.querySelectorAll('.factor-bar').forEach(b => b.style.width='0');
+  document.getElementById('score-hero-bar').style.width = '0%';
+  document.querySelectorAll('.factor-bar').forEach(b => b.style.width = '0');
   document.getElementById('progress-wrap').style.display = 'block';
 }
 
