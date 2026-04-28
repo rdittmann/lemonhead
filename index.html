@@ -3,11 +3,11 @@
 <head>
 <meta name='impact-site-verification' value='bcb05449-c30b-4376-9df7-c18a8563b3bc'>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Lemonhead — Used Car Risk Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy: #0A1628; --navy-mid: #112240; --navy-light: #1B3461;
@@ -20,14 +20,24 @@
   --shadow-lg: 0 12px 48px rgba(10,22,40,0.18);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--navy); min-height: 100vh; overflow-x: hidden; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--off-white);
+  color: var(--navy);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
 /* HEADER */
 header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .logo-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); letter-spacing: -0.5px; }
+.logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); letter-spacing: -0.3px; white-space: nowrap; }
 .logo-text span { color: var(--accent); }
 .header-badge { font-size: 11px; font-weight: 500; color: var(--gray-300); letter-spacing: 0.5px; text-transform: uppercase; }
 
@@ -35,7 +45,7 @@ header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-i
 .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0F2952 100%); padding: 48px 24px 72px; text-align: center; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(30,111,217,0.18) 0%, transparent 70%); pointer-events: none; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: rgba(30,111,217,0.18); border: 1px solid rgba(74,158,255,0.25); color: var(--blue-light); font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; }
-.hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 48px); color: var(--white); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 12px; }
+.hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(26px, 5vw, 48px); color: var(--white); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; word-break: break-word; }
 .hero h1 em { font-style: normal; color: var(--accent); }
 .hero p { font-size: 16px; color: var(--gray-300); line-height: 1.6; max-width: 480px; margin: 0 auto; font-weight: 300; }
 
@@ -45,7 +55,7 @@ main { max-width: 680px; margin: -32px auto 0; padding: 0 16px 64px; position: r
 /* PROGRESS BAR */
 .progress-wrap { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 20px 28px; margin-bottom: 16px; }
 .progress-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.progress-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
+.progress-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); line-height: 1.3; }
 .progress-count { font-size: 12px; color: var(--gray-500); }
 .progress-track { height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--blue-light)); border-radius: 3px; transition: width 0.4s cubic-bezier(0.16,1,0.3,1); }
@@ -58,7 +68,19 @@ main { max-width: 680px; margin: -32px auto 0; padding: 0 16px 64px; position: r
 .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 32px 28px; margin-bottom: 16px; animation: fadeIn 0.35s cubic-bezier(0.16,1,0.3,1); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 500px) { .card { padding: 22px 16px; } }
-.card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+@media (max-width: 380px) {
+  .buy-verdict-title { font-size: 18px !important; }
+  .pills-row { gap: 6px; }
+  .pill { padding: 7px 8px; }
+  .pill-label { font-size: 10px; }
+  .pill-val { font-size: 12px; }
+  .btn-carfax-primary { font-size: 13px; padding: 13px; }
+  .btn-autocheck-secondary { font-size: 12px; }
+  .hero-eyebrow { font-size: 11px; padding: 5px 10px; }
+  .price-gap-alert p { font-size: 12px; }
+  .inline-cta h3 { font-size: 13px; }
+}
+.card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
 .card-title .icon { width: 32px; height: 32px; background: var(--off-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .step-panel { display: none; }
 .step-panel.active { display: block; }
@@ -173,14 +195,14 @@ input.error, select.error { border-color: var(--red); }
 .buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
 .buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
 .buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
-.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; margin-bottom: 4px; letter-spacing: -0.5px; }
+.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(20px, 4vw, 26px); margin-bottom: 4px; letter-spacing: -0.3px; line-height: 1.2; word-break: break-word; }
 .confident .buy-verdict-title { color: #15803D; }
 .negotiate .buy-verdict-title { color: #1D4ED8; }
 .inspect   .buy-verdict-title { color: #A16207; }
 .caution   .buy-verdict-title { color: #C2410C; }
 .walkaway  .buy-verdict-title { color: #BE123C; }
-.buy-verdict-body { font-size: 13px; color: var(--gray-500); line-height: 1.55; margin-bottom: 6px; }
-.buy-verdict-score { font-size: 13px; color: var(--gray-300); font-style: italic; }
+.buy-verdict-body { font-size: 14px; color: var(--gray-500); line-height: 1.55; margin-bottom: 6px; }
+.buy-verdict-score { font-size: 12px; color: var(--gray-300); font-style: italic; }
 
 /* NEGOTIATION TIPS */
 .tips-wrap { margin-top: 16px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
@@ -231,7 +253,7 @@ footer a { color: var(--gray-300); }
 
 /* INLINE CTA */
 .inline-cta { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius-sm); padding: 20px; margin: 16px 0; }
-.inline-cta h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: var(--white); margin-bottom: 14px; line-height: 1.4; }
+.inline-cta h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(14px, 3vw, 16px); color: var(--white); margin-bottom: 14px; line-height: 1.45; letter-spacing: -0.2px; word-break: break-word; }
 .btn-carfax-primary { display: block; width: 100%; padding: 15px; background: var(--accent); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; border: none; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; margin-bottom: 8px; }
 .btn-carfax-primary:hover { background: #f0bc2a; transform: translateY(-1px); }
 .btn-autocheck-secondary { display: block; width: 100%; padding: 13px; background: transparent; color: var(--white); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; }
