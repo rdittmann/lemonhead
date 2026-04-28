@@ -81,7 +81,7 @@ main { max-width: 680px; margin: -32px auto 0; padding: 0 16px 64px; position: r
   .price-gap-alert p { font-size: 12px; }
   .inline-cta h3 { font-size: 13px; }
 }
-.card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+.card-title { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.6; padding-bottom: 2px; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
 .card-title .icon { width: 32px; height: 32px; background: var(--off-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .step-panel { display: none; }
 .step-panel.active { display: block; }
@@ -138,7 +138,7 @@ input.error, select.error { border-color: var(--red); }
 .step-nav { display: flex; gap: 12px; margin-top: 20px; }
 .btn-primary { flex: 1; padding: 14px 24px; background: var(--blue); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn-primary:hover { background: #1560c4; box-shadow: 0 6px 20px rgba(30,111,217,0.35); transform: translateY(-1px); }
-.btn-back { padding: 14px 20px; background: transparent; color: var(--gray-500); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 15px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
+.btn-back { padding: 14px 20px; background: transparent; color: var(--gray-500); font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; line-height: 1.4; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
 .btn-back:hover { border-color: var(--gray-300); color: var(--navy); }
 
 /* RESULTS */
@@ -225,7 +225,7 @@ input.error, select.error { border-color: var(--red); }
 
 /* AFFILIATE */
 .affiliate-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius); padding: 28px; color: var(--white); margin-bottom: 16px; }
-.affiliate-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; letter-spacing: -0.5px; }
+.affiliate-card h2 { font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; letter-spacing: -0.3px; line-height: 1.6; padding-bottom: 2px; }
 .affiliate-card p { font-size: 13px; color: var(--gray-300); margin-bottom: 20px; line-height: 1.6; font-weight: 300; }
 .affiliate-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 440px) { .affiliate-buttons { grid-template-columns: 1fr; } }
@@ -282,14 +282,14 @@ footer a { color: var(--gray-300); }
 .price-verdict.danger { background: var(--red-bg); border: 1.5px solid #FECACA; }
 .price-verdict-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .price-verdict-icon { font-size: 22px; }
-.price-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.price-verdict-title { font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 16px; line-height: 1.6; padding-bottom: 2px; }
 .price-verdict.great  .price-verdict-title { color: #15803D; }
 .price-verdict.fair   .price-verdict-title { color: #1D4ED8; }
 .price-verdict.high   .price-verdict-title { color: #B45309; }
 .price-verdict.danger .price-verdict-title { color: #B91C1C; }
 .price-range-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
 .price-range-label { font-size: 12px; color: var(--gray-500); }
-.price-range-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--navy); }
+.price-range-val { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--navy); line-height: 1.6; }
 .price-bar-outer { height: 8px; background: var(--gray-100); border-radius: 4px; position: relative; margin: 24px 0 16px; }
 .price-bar-range { position: absolute; height: 100%; background: var(--gray-300); border-radius: 4px; opacity: 0.5; }
 .price-bar-ask { position: absolute; width: 4px; height: 18px; top: -5px; background: var(--navy); border-radius: 2px; transition: left 0.8s cubic-bezier(0.16,1,0.3,1); }
@@ -931,6 +931,18 @@ function estimateMarketValue(make, model, year, mileage, accidents, title, servi
   const depr = getDepreciationFactor(age, mileage);
   const cond = getConditionMultiplier(accidents, title, service);
   let estimate = Math.round(base * depr * cond / 100) * 100;
+
+  // Luxury brand depreciation cliff — steep value drop after warranty expiry
+  // Lexus and Acura excluded — Japanese luxury holds value like mainstream
+  const LUXURY_BRANDS = ['bmw','audi','mercedes-benz','cadillac','lincoln','infiniti','volvo'];
+  if (LUXURY_BRANDS.includes(make.toLowerCase())) {
+    let luxMult = 1.0;
+    if      (age >= 16) luxMult = 0.45;
+    else if (age >= 13) luxMult = 0.52;
+    else if (age >= 10) luxMult = 0.62;
+    else if (age >= 7)  luxMult = 0.75;
+    estimate = Math.round(estimate * luxMult / 100) * 100;
+  }
 
   // Hard mileage value ceilings based on real market data
   if      (mileage >= 300000) estimate = Math.min(estimate, 2500);
