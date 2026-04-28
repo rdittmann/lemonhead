@@ -188,10 +188,10 @@ footer a { color: var(--gray-300); }
 .price-range-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
 .price-range-label { font-size: 12px; color: var(--gray-500); }
 .price-range-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--navy); }
-.price-bar-outer { height: 8px; background: var(--gray-100); border-radius: 4px; position: relative; margin: 10px 0 20px; }
+.price-bar-outer { height: 8px; background: var(--gray-100); border-radius: 4px; position: relative; margin: 24px 0 16px; }
 .price-bar-range { position: absolute; height: 100%; background: var(--gray-300); border-radius: 4px; opacity: 0.5; }
 .price-bar-ask { position: absolute; width: 4px; height: 18px; top: -5px; background: var(--navy); border-radius: 2px; transition: left 0.8s cubic-bezier(0.16,1,0.3,1); }
-.price-bar-ask::after { content: 'Ask'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+.price-bar-ask::before { content: 'Ask'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; color: var(--navy); white-space: nowrap; background: var(--white); padding: 1px 4px; border-radius: 3px; }
 .price-verdict-note { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
 </style>
 </head>
@@ -412,8 +412,9 @@ footer a { color: var(--gray-300); }
     <div class="explanation" id="explanation"></div>
     <div id="price-verdict-wrap" style="display:none;"></div>
     <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
-    <div style="margin-top:12px;text-align:center">
-      <button class="btn-back" onclick="startOver()" style="width:100%;margin-top:4px">← Start Over</button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-back" onclick="goBack(4)" style="flex:1">← Edit Answers</button>
+      <button class="btn-back" onclick="startOver()" style="flex:1">↺ Start Over</button>
     </div>
   </div>
 
@@ -586,6 +587,14 @@ function goNext(from) {
   showStep(currentStep);
 }
 function goBack(from) {
+  if (from === 4) {
+    currentStep = 3;
+    showStep(3);
+    document.getElementById('progress-wrap').style.display = 'block';
+    document.getElementById('affiliate').style.display = 'none';
+    document.getElementById('price-verdict-wrap').style.display = 'none';
+    return;
+  }
   currentStep = from - 1;
   showStep(currentStep);
 }
