@@ -7,7 +7,7 @@
 <title>Lemonhead — Used Car Risk Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy: #0A1628; --navy-mid: #112240; --navy-light: #1B3461;
@@ -45,7 +45,7 @@ header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-i
 .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0F2952 100%); padding: 48px 24px 72px; text-align: center; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(30,111,217,0.18) 0%, transparent 70%); pointer-events: none; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: rgba(30,111,217,0.18); border: 1px solid rgba(74,158,255,0.25); color: var(--blue-light); font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; }
-.hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(26px, 5vw, 48px); color: var(--white); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; word-break: break-word; }
+.hero h1 { font-family: 'Barlow Condensed', 'Syne', sans-serif; font-weight: 800; font-size: clamp(36px, 8vw, 64px); color: var(--white); line-height: 1.2; letter-spacing: 0; margin-bottom: 12px; word-break: break-word; overflow: visible; padding-bottom: 4px; }
 .hero h1 em { font-style: normal; color: var(--accent); }
 .hero p { font-size: 16px; color: var(--gray-300); line-height: 1.6; max-width: 480px; margin: 0 auto; font-weight: 300; }
 
@@ -186,7 +186,7 @@ input.error, select.error { border-color: var(--red); }
 .celebrate-banner { display: none; background: var(--navy); border-radius: var(--radius-sm); padding: 12px 18px; margin-bottom: 18px; text-align: center; }
 .celebrate-banner.show { display: block; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes popIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
-.celebrate-banner span { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #F5C842; letter-spacing: -0.3px; }
+.celebrate-banner span { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: #F5C842; letter-spacing: 0; }
 
 /* BUY VERDICT */
 .buy-verdict { border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 0; }
@@ -195,7 +195,7 @@ input.error, select.error { border-color: var(--red); }
 .buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
 .buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
 .buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
-.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(20px, 4vw, 26px); margin-bottom: 4px; letter-spacing: -0.3px; line-height: 1.2; word-break: break-word; }
+.buy-verdict-title { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: clamp(18px, 4vw, 24px); margin-bottom: 4px; letter-spacing: -0.2px; line-height: 1.25; word-break: break-word; }
 .confident .buy-verdict-title { color: #15803D; }
 .negotiate .buy-verdict-title { color: #1D4ED8; }
 .inspect   .buy-verdict-title { color: #A16207; }
@@ -253,7 +253,7 @@ footer a { color: var(--gray-300); }
 
 /* INLINE CTA */
 .inline-cta { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius-sm); padding: 20px; margin: 16px 0; }
-.inline-cta h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(14px, 3vw, 16px); color: var(--white); margin-bottom: 14px; line-height: 1.45; letter-spacing: -0.2px; word-break: break-word; }
+.inline-cta h3 { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: clamp(14px, 3vw, 16px); color: var(--white); margin-bottom: 14px; line-height: 1.45; letter-spacing: 0; word-break: break-word; }
 .btn-carfax-primary { display: block; width: 100%; padding: 15px; background: var(--accent); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; border: none; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; margin-bottom: 8px; }
 .btn-carfax-primary:hover { background: #f0bc2a; transform: translateY(-1px); }
 .btn-autocheck-secondary { display: block; width: 100%; padding: 13px; background: transparent; color: var(--white); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; }
