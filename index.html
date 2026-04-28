@@ -172,6 +172,27 @@ input.error, select.error { border-color: var(--red); }
 .trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
 footer { text-align: center; padding: 20px 16px 40px; font-size: 12px; color: var(--gray-300); line-height: 1.7; }
 footer a { color: var(--gray-300); }
+/* PRICE VERDICT */
+.price-verdict { border-radius: var(--radius-sm); padding: 18px 20px; margin-top: 20px; }
+.price-verdict.great  { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+.price-verdict.fair   { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.price-verdict.high   { background: var(--yellow-bg); border: 1.5px solid #FDE68A; }
+.price-verdict.danger { background: var(--red-bg); border: 1.5px solid #FECACA; }
+.price-verdict-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.price-verdict-icon { font-size: 22px; }
+.price-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.price-verdict.great  .price-verdict-title { color: #15803D; }
+.price-verdict.fair   .price-verdict-title { color: #1D4ED8; }
+.price-verdict.high   .price-verdict-title { color: #B45309; }
+.price-verdict.danger .price-verdict-title { color: #B91C1C; }
+.price-range-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
+.price-range-label { font-size: 12px; color: var(--gray-500); }
+.price-range-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--navy); }
+.price-bar-outer { height: 8px; background: var(--gray-100); border-radius: 4px; position: relative; margin: 10px 0 20px; }
+.price-bar-range { position: absolute; height: 100%; background: var(--gray-300); border-radius: 4px; opacity: 0.5; }
+.price-bar-ask { position: absolute; width: 4px; height: 18px; top: -5px; background: var(--navy); border-radius: 2px; transition: left 0.8s cubic-bezier(0.16,1,0.3,1); }
+.price-bar-ask::after { content: 'Ask'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+.price-verdict-note { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -262,6 +283,15 @@ footer a { color: var(--gray-300); }
         <label for="mileage">Mileage</label>
         <input type="number" id="mileage" placeholder="e.g. 72000" min="0" max="500000">
         <span class="error-msg" id="err-mileage">Enter a valid mileage (0–500,000).</span>
+      </div>
+
+      <div class="form-group full">
+        <label for="asking-price">Asking Price <span style="color:var(--gray-300);font-weight:400">(optional)</span></label>
+        <div style="position:relative">
+          <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-500);font-size:15px;">$</span>
+          <input type="number" id="asking-price" placeholder="e.g. 18500" min="0" max="200000" style="padding-left:28px;">
+        </div>
+        <span style="font-size:12px;color:var(--gray-300);margin-top:4px;">We'll estimate fair market value and flag if the price seems off.</span>
       </div>
 
       <div class="form-group full">
@@ -380,6 +410,7 @@ footer a { color: var(--gray-300); }
     <div class="factor-row"><span class="factor-label">Reliability</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div><span class="factor-val" id="val-brand">—</span></div>
     <div class="factor-row"><span class="factor-label">History</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-history"></div></div><span class="factor-val" id="val-history">—</span></div>
     <div class="explanation" id="explanation"></div>
+    <div id="price-verdict-wrap" style="display:none;"></div>
     <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
     <div style="margin-top:12px;text-align:center">
       <button class="btn-back" onclick="startOver()" style="width:100%;margin-top:4px">← Start Over</button>
@@ -611,7 +642,226 @@ function validateStep(step) {
   return ok;
 }
 
-// ── SCORING ──────────────────────────────────────────────────────────────────
+// ── MARKET VALUE ENGINE ──────────────────────────────────────────────────────
+// Base MSRP by make/model (approximate new price in $USD, sourced from manufacturer data)
+const BASE_PRICES = {
+  'toyota': {
+    'camry':28000,'corolla':22000,'rav4':29000,'highlander':38000,'tacoma':32000,
+    'tundra':40000,'4runner':40000,'sienna':38000,'prius':28000,'venza':34000,
+    'sequoia':58000,'land cruiser':85000,'avalon':38000,'default':30000
+  },
+  'honda': {
+    'accord':28000,'civic':24000,'cr-v':30000,'pilot':38000,'odyssey':36000,
+    'ridgeline':40000,'passport':36000,'hr-v':24000,'fit':20000,'insight':26000,'default':27000
+  },
+  'ford': {
+    'f-150':38000,'f-250':42000,'explorer':38000,'escape':28000,'mustang':30000,
+    'expedition':54000,'ranger':30000,'edge':36000,'bronco':34000,'maverick':22000,
+    'transit':38000,'fusion':26000,'focus':20000,'default':30000
+  },
+  'chevrolet': {
+    'silverado 1500':38000,'silverado 2500':44000,'equinox':28000,'tahoe':55000,
+    'suburban':58000,'traverse':36000,'camaro':28000,'corvette':62000,'malibu':24000,
+    'colorado':30000,'blazer':32000,'trax':22000,'impala':30000,'default':30000
+  },
+  'bmw': {
+    '3 series':44000,'5 series':56000,'x3':46000,'x5':62000,'x1':38000,'m3':72000,
+    'm5':104000,'7 series':88000,'4 series':50000,'x7':76000,'z4':52000,'default':55000
+  },
+  'mercedes-benz': {
+    'c-class':44000,'e-class':56000,'gle':62000,'glc':46000,'s-class':94000,
+    'gls':92000,'g-class':132000,'cla':38000,'a-class':34000,'sprinter':42000,'default':58000
+  },
+  'audi': {
+    'a4':40000,'q5':44000,'a6':56000,'q7':58000,'a3':34000,'q3':36000,
+    'a5':46000,'q8':68000,'e-tron':66000,'default':48000
+  },
+  'hyundai': {
+    'elantra':22000,'sonata':26000,'tucson':28000,'santa fe':32000,'palisade':38000,
+    'kona':22000,'ioniq 5':44000,'ioniq 6':42000,'venue':20000,'accent':18000,'default':26000
+  },
+  'kia': {
+    'forte':20000,'k5':26000,'sorento':32000,'telluride':38000,'sportage':28000,
+    'soul':22000,'carnival':36000,'stinger':34000,'niro':26000,'ev6':42000,'default':26000
+  },
+  'jeep': {
+    'wrangler':32000,'grand cherokee':38000,'cherokee':28000,'compass':26000,
+    'gladiator':38000,'renegade':24000,'wagoneer':58000,'default':32000
+  },
+  'ram': { '1500':36000,'2500':44000,'3500':50000,'promaster':36000,'default':38000 },
+  'dodge': {
+    'charger':32000,'challenger':30000,'durango':38000,'grand caravan':28000,
+    'journey':26000,'dart':20000,'default':28000
+  },
+  'subaru': {
+    'outback':30000,'forester':28000,'impreza':22000,'crosstrek':24000,'ascent':36000,
+    'legacy':26000,'wrx':30000,'brz':28000,'default':27000
+  },
+  'nissan': {
+    'altima':26000,'rogue':28000,'pathfinder':36000,'frontier':30000,'titan':42000,
+    'murano':34000,'armada':50000,'sentra':22000,'versa':18000,'kicks':22000,'leaf':28000,'default':27000
+  },
+  'mazda': {
+    'cx-5':28000,'mazda3':24000,'cx-9':36000,'mazda6':26000,'cx-30':24000,
+    'mx-5 miata':28000,'cx-50':30000,'cx-3':22000,'default':26000
+  },
+  'lexus': {
+    'rx':48000,'es':42000,'nx':40000,'is':40000,'gx':56000,'lx':88000,
+    'ls':78000,'ux':34000,'rc':44000,'default':50000
+  },
+  'acura': {
+    'rdx':40000,'mdx':48000,'tlx':38000,'ilx':28000,'rlx':56000,'default':40000
+  },
+  'gmc': {
+    'sierra 1500':40000,'sierra 2500':46000,'terrain':30000,'acadia':38000,
+    'yukon':58000,'canyon':32000,'default':38000
+  },
+  'volkswagen': {
+    'jetta':24000,'passat':28000,'tiguan':30000,'atlas':36000,'golf':24000,
+    'gti':30000,'id.4':42000,'arteon':36000,'default':28000
+  },
+  'volvo': {
+    'xc60':46000,'xc90':56000,'xc40':36000,'s60':40000,'s90':56000,'default':46000
+  },
+  'infiniti': {
+    'q50':38000,'qx60':48000,'qx80':66000,'q60':44000,'qx50':40000,'default':44000
+  },
+  'cadillac': {
+    'escalade':78000,'xt5':46000,'xt6':52000,'ct5':38000,'ct4':34000,'default':50000
+  },
+  'buick': {
+    'enclave':44000,'encore':28000,'envision':34000,'lacrosse':36000,'default':34000
+  },
+  'lincoln': {
+    'navigator':78000,'aviator':56000,'corsair':38000,'mkz':38000,'default':48000
+  },
+  'chrysler': { '300':34000,'pacifica':36000,'200':24000,'voyager':30000,'default':30000 },
+  'mitsubishi': {
+    'outlander':28000,'eclipse cross':26000,'outlander sport':24000,'mirage':16000,'default':24000
+  },
+  'other': { 'default': 28000 }
+};
+
+// Depreciation curve: returns fraction of original value remaining
+// Based on average US vehicle depreciation data (iSeeCars, CarEdge research)
+function getDepreciationFactor(age, mileage) {
+  // Age-based depreciation (average across segments)
+  const ageFactors = [1.0, 0.81, 0.72, 0.65, 0.60, 0.55, 0.50, 0.46, 0.42, 0.39, 0.36, 0.33, 0.31, 0.29, 0.27, 0.25];
+  const ageFactor = age >= ageFactors.length ? 0.20 : ageFactors[Math.min(age, ageFactors.length-1)];
+
+  // Mileage adjustment: $0.08 per mile over 12k/yr average, $0.06 under
+  const expectedMiles = age * 12000;
+  const mileDiff = mileage - expectedMiles;
+  const mileAdj = mileDiff > 0 ? -mileDiff * 0.00008 : -mileDiff * 0.00005;
+  const mileAdjCapped = Math.max(-0.15, Math.min(0.12, mileAdj));
+
+  return Math.max(0.10, ageFactor + mileAdjCapped);
+}
+
+// Condition multiplier based on accident/title/service
+function getConditionMultiplier(accidents, title, service) {
+  let mult = 1.0;
+  if (title === 'salvage') mult *= 0.55;
+  else if (title === 'rebuilt') mult *= 0.75;
+  else if (title === 'lemon') mult *= 0.60;
+  if (accidents === 'minor') mult *= 0.92;
+  else if (accidents === 'major') mult *= 0.82;
+  if (service === 'none') mult *= 0.95;
+  else if (service === 'full') mult *= 1.02;
+  return mult;
+}
+
+function getBasePrice(make, model) {
+  const makeKey = make.toLowerCase();
+  const modelKey = model.toLowerCase();
+  const makeData = BASE_PRICES[makeKey] || BASE_PRICES['other'];
+  // Try exact match, then partial match
+  if (makeData[modelKey]) return makeData[modelKey];
+  for (const key of Object.keys(makeData)) {
+    if (key !== 'default' && (modelKey.includes(key) || key.includes(modelKey))) return makeData[key];
+  }
+  return makeData['default'] || 28000;
+}
+
+function estimateMarketValue(make, model, year, mileage, accidents, title, service) {
+  const age = new Date().getFullYear() - year;
+  const base = getBasePrice(make, model);
+  const depr = getDepreciationFactor(age, mileage);
+  const cond = getConditionMultiplier(accidents, title, service);
+  const estimate = Math.round(base * depr * cond / 100) * 100;
+  const low  = Math.round(estimate * 0.88 / 100) * 100;
+  const high = Math.round(estimate * 1.12 / 100) * 100;
+  return { estimate, low, high };
+}
+
+function getPriceVerdict(askingPrice, low, high, estimate, make, model, year, title) {
+  const pctOfEstimate = askingPrice / estimate;
+  let cls, icon, title_v, note;
+
+  if (title === 'salvage' || title === 'lemon') {
+    if (pctOfEstimate > 0.70) {
+      cls='danger'; icon='🚨'; title_v='Overpriced for Title Type';
+      note = `Salvage and lemon law vehicles typically sell for 40–55% of clean-title market value. This asking price is too high given the title status.`;
+    } else {
+      cls='fair'; icon='⚠️'; title_v='Price Reflects Title Discount';
+      note = `The price accounts for the title issue. Still — always get an independent inspection and full history report before buying.`;
+    }
+  } else if (pctOfEstimate < 0.75) {
+    cls='danger'; icon='🚨'; title_v='Suspiciously Underpriced';
+    note = `This car is priced ${Math.round((1-pctOfEstimate)*100)}% below estimated market value. Prices this low are often a red flag — possible hidden damage, title issues, or mechanical problems not disclosed. Get a full Carfax report and mechanic inspection before proceeding.`;
+  } else if (pctOfEstimate < 0.90) {
+    cls='great'; icon='💚'; title_v='Great Deal — Below Market';
+    note = `This price is ${Math.round((1-pctOfEstimate)*100)}% below the estimated market range. Could be a motivated seller or a hidden issue — either way, worth investigating further with a history report.`;
+  } else if (pctOfEstimate <= 1.10) {
+    cls='fair'; icon='✅'; title_v='Fair Market Price';
+    note = `This asking price falls within the expected market range for a ${year} ${make} ${model}. Neither a steal nor overpriced.`;
+  } else if (pctOfEstimate <= 1.25) {
+    cls='high'; icon='⚠️'; title_v='Slightly Overpriced';
+    note = `This is ${Math.round((pctOfEstimate-1)*100)}% above our estimated market value. You may have room to negotiate — use the market range as leverage.`;
+  } else {
+    cls='danger'; icon='🚨'; title_v='Significantly Overpriced';
+    note = `This asking price is ${Math.round((pctOfEstimate-1)*100)}% above estimated market value. Unless this vehicle has exceptional condition, low miles, or rare features, this price is hard to justify.`;
+  }
+  return { cls, icon, title_v, note };
+}
+
+function renderPriceVerdict(askingPrice, make, model, year, mileage) {
+  const wrap = document.getElementById('price-verdict-wrap');
+  if (!askingPrice || askingPrice <= 0) { wrap.style.display='none'; return; }
+
+  const { estimate, low, high } = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service);
+  const verdict = getPriceVerdict(askingPrice, low, high, estimate, make, model, year, selections.title);
+
+  // Build the position bar (asking price relative to low-high range)
+  const barMin = Math.min(low * 0.7, askingPrice * 0.85);
+  const barMax = Math.max(high * 1.3, askingPrice * 1.15);
+  const rangeLeft  = ((low  - barMin) / (barMax - barMin) * 100).toFixed(1);
+  const rangeWidth = ((high - low)    / (barMax - barMin) * 100).toFixed(1);
+  const askLeft    = ((askingPrice - barMin) / (barMax - barMin) * 100).toFixed(1);
+
+  wrap.innerHTML = `
+    <div class="price-verdict ${verdict.cls}">
+      <div class="price-verdict-header">
+        <span class="price-verdict-icon">${verdict.icon}</span>
+        <span class="price-verdict-title">${verdict.title_v}</span>
+      </div>
+      <div class="price-range-row">
+        <span class="price-range-label">Estimated Market Range</span>
+        <span class="price-range-val">$${low.toLocaleString()} – $${high.toLocaleString()}</span>
+      </div>
+      <div class="price-range-row">
+        <span class="price-range-label">Asking Price</span>
+        <span class="price-range-val" style="color:${verdict.cls==='great'?'#15803D':verdict.cls==='danger'?'#B91C1C':verdict.cls==='high'?'#B45309':'#1D4ED8'}">$${askingPrice.toLocaleString()}</span>
+      </div>
+      <div class="price-bar-outer">
+        <div class="price-bar-range" style="left:${rangeLeft}%;width:${rangeWidth}%"></div>
+        <div class="price-bar-ask" style="left:calc(${Math.min(95,Math.max(2,parseFloat(askLeft)))}% - 2px)"></div>
+      </div>
+      <p class="price-verdict-note">${verdict.note} <em style="display:block;margin-top:6px;color:var(--gray-300)">Estimate based on average depreciation for a ${year} ${make} ${model}. Actual value varies by condition, location, and market demand.</em></p>
+    </div>`;
+  wrap.style.display = 'block';
+}
+
 const RELIABILITY_LABELS = [[0,'Excellent'],[10,'Very Good'],[15,'Good'],[20,'Average'],[25,'Below Avg'],[30,'Poor'],[35,'Very Poor']];
 function getReliabilityLabel(s) { let l='Excellent'; for(const [k,v] of RELIABILITY_LABELS){if(s>=k)l=v;} return l; }
 
@@ -680,6 +930,7 @@ function analyze() {
   const year    = parseInt(document.getElementById('year').value);
   const mileage = parseInt(document.getElementById('mileage').value);
   const state   = document.getElementById('state').value;
+  const askingPrice = parseInt(document.getElementById('asking-price').value) || 0;
   const vin     = currentVin;
 
   const scores = calcScore(year, mileage, make, state, selections.driving, selections.owners, selections.accidents, selections.title, selections.service);
@@ -732,6 +983,9 @@ function analyze() {
 
   document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, state, scores);
 
+  // Price verdict
+  renderPriceVerdict(askingPrice, make, model, year, mileage);
+
   // VIN chip
   const chip = document.getElementById('vin-chip');
   if (vin) { document.getElementById('vin-chip-text').textContent=`VIN: ${vin}`; chip.style.display='inline-flex'; }
@@ -760,6 +1014,7 @@ function startOver() {
   currentStep = 1;
   showStep(1);
   document.getElementById('affiliate').style.display = 'none';
+  document.getElementById('price-verdict-wrap').style.display = 'none';
   document.getElementById('score-number').classList.remove('show');
   document.getElementById('gauge-needle').style.transform = 'rotate(-90deg)';
   document.querySelectorAll('.factor-bar').forEach(b => b.style.width='0');
