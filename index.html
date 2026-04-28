@@ -792,20 +792,18 @@ const BASE_PRICES = {
   'other': { 'default': 28000 }
 };
 
-// Depreciation curve: returns fraction of original value remaining
-// Based on average US vehicle depreciation data (iSeeCars, CarEdge research)
+// Depreciation curve: calibrated from 7 real-world test data points vs Carfax
 function getDepreciationFactor(age, mileage) {
-  // Age-based depreciation (average across segments)
-  const ageFactors = [1.0, 0.81, 0.72, 0.65, 0.60, 0.55, 0.50, 0.46, 0.42, 0.39, 0.36, 0.33, 0.31, 0.29, 0.27, 0.25];
-  const ageFactor = age >= ageFactors.length ? 0.20 : ageFactors[Math.min(age, ageFactors.length-1)];
+  const ageFactors = [1.00,0.85,0.78,0.73,0.69,0.65,0.61,0.57,0.54,0.51,0.48,0.44,0.40,0.36,0.32,0.28];
+  const ageFactor = age >= ageFactors.length ? 0.25 : ageFactors[Math.min(age, ageFactors.length-1)];
 
-  // Mileage adjustment: $0.08 per mile over 12k/yr average, $0.06 under
+  // Mileage adjustment: $0.12/mile penalty over 12k/yr average, $0.04/mile credit under
   const expectedMiles = age * 12000;
   const mileDiff = mileage - expectedMiles;
-  const mileAdj = mileDiff > 0 ? -mileDiff * 0.00008 : -mileDiff * 0.00005;
-  const mileAdjCapped = Math.max(-0.15, Math.min(0.12, mileAdj));
+  const mileAdj = mileDiff > 0 ? -mileDiff * 0.00012 : -mileDiff * 0.00004;
+  const mileAdjCapped = Math.max(-0.20, Math.min(0.10, mileAdj));
 
-  return Math.max(0.10, ageFactor + mileAdjCapped);
+  return Math.max(0.08, ageFactor + mileAdjCapped);
 }
 
 // Condition multiplier based on accident/title/service
@@ -838,7 +836,14 @@ function estimateMarketValue(make, model, year, mileage, accidents, title, servi
   const base = getBasePrice(make, model);
   const depr = getDepreciationFactor(age, mileage);
   const cond = getConditionMultiplier(accidents, title, service);
-  const estimate = Math.round(base * depr * cond / 100) * 100;
+  let estimate = Math.round(base * depr * cond / 100) * 100;
+
+  // Hard mileage value ceilings based on real market data
+  if      (mileage >= 300000) estimate = Math.min(estimate, 2500);
+  else if (mileage >= 250000) estimate = Math.min(estimate, 3500);
+  else if (mileage >= 200000) estimate = Math.min(estimate, 5000);
+  else if (mileage >= 150000) estimate = Math.min(estimate, 8000);
+
   const low  = Math.round(estimate * 0.88 / 100) * 100;
   const high = Math.round(estimate * 1.12 / 100) * 100;
   return { estimate, low, high };
@@ -907,7 +912,7 @@ function renderPriceVerdict(askingPrice, make, model, year, mileage) {
         <div class="price-bar-range" style="left:${rangeLeft}%;width:${rangeWidth}%"></div>
         <div class="price-bar-ask" style="left:calc(${Math.min(95,Math.max(2,parseFloat(askLeft)))}% - 2px)"></div>
       </div>
-      <p class="price-verdict-note">${verdict.note} <em style="display:block;margin-top:6px;color:var(--gray-300)">Estimate based on average depreciation for a ${year} ${make} ${model}. Actual value varies by condition, location, and market demand.</em></p>
+      <p class="price-verdict-note">${verdict.note} <em style="display:block;margin-top:6px;color:var(--gray-300)">Estimate based on average depreciation for a ${year} ${make} ${model}. Actual value varies by condition, location, and market demand.</em>${['salvage','rebuilt','lemon'].includes(selections.title) ? '<em style="display:block;margin-top:6px;color:var(--gray-300)">Note: Vehicle history services like Carfax may show clean-title market value on listings. Our estimate reflects the actual salvage/rebuilt-adjusted value, which is typically 40–55% lower.</em>' : ''}</p>
     </div>`;
   wrap.style.display = 'block';
 }
