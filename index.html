@@ -167,19 +167,20 @@ input.error, select.error { border-color: var(--red); }
 .celebrate-banner span { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #F5C842; letter-spacing: -0.3px; }
 
 /* BUY VERDICT */
-.buy-verdict { border-radius: var(--radius-sm); padding: 18px 20px; margin-top: 16px; }
+.buy-verdict { border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 0; }
 .buy-verdict.confident { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
 .buy-verdict.negotiate { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
 .buy-verdict.inspect   { background: #FEFCE8; border: 1.5px solid #FEF08A; }
 .buy-verdict.caution   { background: #FFF7ED; border: 1.5px solid #FED7AA; }
 .buy-verdict.walkaway  { background: #FFF1F2; border: 1.5px solid #FECDD3; }
-.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 5px; }
+.buy-verdict-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; margin-bottom: 4px; letter-spacing: -0.5px; }
 .confident .buy-verdict-title { color: #15803D; }
 .negotiate .buy-verdict-title { color: #1D4ED8; }
 .inspect   .buy-verdict-title { color: #A16207; }
 .caution   .buy-verdict-title { color: #C2410C; }
 .walkaway  .buy-verdict-title { color: #BE123C; }
-.buy-verdict-body { font-size: 13px; color: var(--gray-500); line-height: 1.55; }
+.buy-verdict-body { font-size: 13px; color: var(--gray-500); line-height: 1.55; margin-bottom: 6px; }
+.buy-verdict-score { font-size: 13px; color: var(--gray-300); font-style: italic; }
 
 /* NEGOTIATION TIPS */
 .tips-wrap { margin-top: 16px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
@@ -210,7 +211,40 @@ input.error, select.error { border-color: var(--red); }
 .trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
 footer { text-align: center; padding: 20px 16px 40px; font-size: 12px; color: var(--gray-300); line-height: 1.7; }
 footer a { color: var(--gray-300); }
-/* PRICE VERDICT */
+/* PRICE GAP ALERT */
+.price-gap-alert { background: var(--navy); border-radius: var(--radius-sm); padding: 12px 18px; margin-bottom: 16px; display: none; }
+.price-gap-alert.show { display: block; }
+.price-gap-alert p { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--accent); line-height: 1.5; margin: 0; }
+.price-gap-alert p span { display: block; font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 12px; color: rgba(245,200,66,0.7); margin-top: 3px; }
+
+/* SUMMARY PILLS */
+.pills-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; }
+.pill { border-radius: 100px; padding: 8px 12px; text-align: center; border: 1.5px solid; }
+.pill-label { font-size: 11px; font-weight: 500; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 3px; }
+.pill-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+.pill.pill-low    { background: #F0FDF4; border-color: #BBF7D0; }
+.pill.pill-low    .pill-val { color: #15803D; }
+.pill.pill-medium { background: #FEFCE8; border-color: #FEF08A; }
+.pill.pill-medium .pill-val { color: #A16207; }
+.pill.pill-high   { background: #FFF1F2; border-color: #FECDD3; }
+.pill.pill-high   .pill-val { color: #BE123C; }
+
+/* INLINE CTA */
+.inline-cta { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius-sm); padding: 20px; margin: 16px 0; }
+.inline-cta h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: var(--white); margin-bottom: 14px; line-height: 1.4; }
+.btn-carfax-primary { display: block; width: 100%; padding: 15px; background: var(--accent); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; border: none; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; margin-bottom: 8px; }
+.btn-carfax-primary:hover { background: #f0bc2a; transform: translateY(-1px); }
+.btn-autocheck-secondary { display: block; width: 100%; padding: 13px; background: transparent; color: var(--white); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; }
+.btn-autocheck-secondary:hover { background: rgba(255,255,255,0.08); }
+.cta-trust { font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 10px; }
+
+/* COLLAPSIBLE BREAKDOWN */
+.breakdown-wrap { margin-top: 12px; border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; }
+.breakdown-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: var(--white); user-select: none; }
+.breakdown-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
+.breakdown-chevron { font-size: 12px; color: var(--gray-500); transition: transform 0.25s; }
+.breakdown-chevron.open { transform: rotate(180deg); }
+.breakdown-body { display: none; padding: 4px 16px 14px; background: var(--off-white); }
 .price-verdict { border-radius: var(--radius-sm); padding: 18px 20px; margin-top: 20px; }
 .price-verdict.great  { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
 .price-verdict.fair   { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
@@ -424,50 +458,67 @@ footer a { color: var(--gray-300); }
   <!-- STEP 4: RESULTS -->
   <div class="card step-panel" id="step-4">
     <div class="celebrate-banner" id="celebrate-banner"><span>You might have found a good one! 🎉</span></div>
-    <div class="card-title"><div class="icon">🍋</div>Lemon Index</div>
-    <div id="vin-chip" class="vin-chip" style="display:none;">🔍 <span id="vin-chip-text"></span></div>
-    <div id="risk-banner" class="risk-banner fresh">
-      <div class="risk-dot" id="risk-dot">🍋</div>
-      <div>
-        <div class="risk-label" id="risk-label">Fresh Squeezed</div>
-        <div class="risk-sub" id="risk-sub">—</div>
-      </div>
-    </div>
-    <div class="score-wrap">
-      <div class="gauge-container">
-        <div class="gauge-bg"></div>
-        <div class="gauge-cover"></div>
-        <div class="gauge-needle" id="gauge-needle"></div>
-        <div class="gauge-center"></div>
-      </div>
-      <div class="score-number" id="score-number">0</div>
-      <div class="score-label">out of 100 &nbsp;•&nbsp; higher = more lemon</div>
-    </div>
-    <div class="breakdown-title">Risk Factors</div>
-    <div class="factor-row"><span class="factor-label">Age</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div><span class="factor-val" id="val-age">—</span></div>
-    <div class="factor-row"><span class="factor-label">Mileage</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-mileage"></div></div><span class="factor-val" id="val-mileage">—</span></div>
-    <div class="factor-row"><span class="factor-label">Reliability</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div><span class="factor-val" id="val-brand">—</span></div>
-    <div class="factor-row"><span class="factor-label">History</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-history"></div></div><span class="factor-val" id="val-history">—</span></div>
-    <div class="explanation" id="explanation"></div>
+
+    <!-- S1: VERDICT HERO -->
     <div id="buy-verdict-wrap"></div>
-    <div id="tips-wrap-outer"></div>
+
+    <!-- S2: PRICE GAP ALERT -->
+    <div class="price-gap-alert" id="price-gap-alert">
+      <p id="price-gap-main"></p>
+    </div>
+
+    <!-- S3: THREE SUMMARY PILLS -->
+    <div class="pills-row">
+      <div class="pill" id="pill-age"><span class="pill-label">Age</span><span class="pill-val" id="pill-age-val">—</span></div>
+      <div class="pill" id="pill-mileage"><span class="pill-label">Mileage</span><span class="pill-val" id="pill-mileage-val">—</span></div>
+      <div class="pill" id="pill-reliability"><span class="pill-label">Reliability</span><span class="pill-val" id="pill-reliability-val">—</span></div>
+    </div>
+
+    <!-- S4: INLINE CTA -->
+    <div class="inline-cta" id="inline-cta">
+      <h3 id="cta-headline">Confirm it before you commit.</h3>
+      <a id="link-carfax" href="https://www.carfax.com" target="_blank" rel="noopener" class="btn-carfax-primary">🛡️ Get Carfax Report</a>
+      <a id="link-autocheck" href="https://www.autocheck.com" target="_blank" rel="noopener" class="btn-autocheck-secondary">📋 Get AutoCheck Report</a>
+      <div class="cta-trust">Reports from $39.99 · Instant access · Used by millions of buyers</div>
+    </div>
+
+    <!-- S5: PRICE VERDICT -->
     <div id="price-verdict-wrap" style="display:none;"></div>
-    <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
+
+    <!-- S6: NEGOTIATION TIPS (collapsed) -->
+    <div id="tips-wrap-outer"></div>
+
+    <!-- S7: FULL BREAKDOWN (collapsed) -->
+    <div class="breakdown-wrap" id="breakdown-wrap" style="display:none;">
+      <div class="breakdown-header" onclick="toggleBreakdown(this)">
+        <span class="breakdown-header-title">📊 Full Risk Breakdown</span>
+        <span class="breakdown-chevron">▾</span>
+      </div>
+      <div class="breakdown-body">
+        <div id="vin-chip" class="vin-chip" style="display:none;margin-top:10px;">🔍 <span id="vin-chip-text"></span></div>
+        <div class="explanation" id="explanation" style="margin-top:8px;background:transparent;padding:8px 0;"></div>
+        <div style="margin-top:12px;">
+          <div class="factor-row"><span class="factor-label">Age</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div><span class="factor-val" id="val-age">—</span></div>
+          <div class="factor-row"><span class="factor-label">Mileage</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-mileage"></div></div><span class="factor-val" id="val-mileage">—</span></div>
+          <div class="factor-row"><span class="factor-label">Reliability</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div><span class="factor-val" id="val-brand">—</span></div>
+          <div class="factor-row"><span class="factor-label">History</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-history"></div></div><span class="factor-val" id="val-history">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8: SHARE + NAV -->
+    <button class="btn-share" onclick="shareResult()" style="margin-top:16px;">🔗 Share This Result</button>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="btn-back" onclick="goBack(4)" style="flex:1">← Edit Answers</button>
       <button class="btn-back" onclick="startOver()" style="flex:1">↺ Start Over</button>
     </div>
   </div>
 
-  <!-- AFFILIATE (shown with results) -->
-  <div class="card affiliate-card" id="affiliate" style="display:none;">
-    <h2>Think it might be a lemon?</h2>
-    <p>Get the full story before someone squeezes you. A vehicle history report reveals accidents, title issues, odometer fraud, and more.</p>
-    <div class="affiliate-buttons">
-      <a id="link-carfax" href="https://www.carfax.com" target="_blank" rel="noopener" class="btn-affiliate btn-carfax">🛡️ Check on Carfax</a>
-      <a id="link-autocheck" href="https://www.autocheck.com" target="_blank" rel="noopener" class="btn-affiliate btn-autocheck">📋 Check on AutoCheck</a>
-    </div>
-    <div class="affiliate-note">Affiliate links — we may earn a commission at no cost to you.</div>
+  <!-- AFFILIATE CARD (hidden — CTA now inline above) -->
+  <div id="affiliate" style="display:none;">
+    <h2 id="affiliate-h2"></h2>
+    <p id="affiliate-p"></p>
+  </div>
   </div>
 
   <div class="trust-row" id="trust-row">
@@ -917,6 +968,69 @@ function renderPriceVerdict(askingPrice, make, model, year, mileage) {
   wrap.style.display = 'block';
 }
 
+// ── SUMMARY PILLS ─────────────────────────────────────────────────────────────
+function renderPills(scores) {
+  function setPill(id, valId, raw, max) {
+    const pct = Math.round((raw / max) * 100);
+    const cls = pct < 35 ? 'pill-low' : pct < 65 ? 'pill-medium' : 'pill-high';
+    const lbl = pct < 35 ? 'Low' : pct < 65 ? 'Medium' : 'High';
+    document.getElementById(id).className = `pill ${cls}`;
+    document.getElementById(valId).textContent = lbl;
+  }
+  setPill('pill-age',     'pill-age-val',     scores.ageFactor,    35);
+  setPill('pill-mileage', 'pill-mileage-val', scores.milageFactor, 40);
+  const relPct = Math.round((scores.brandFactor / 35) * 100);
+  const relCls = relPct < 35 ? 'pill-low' : relPct < 65 ? 'pill-medium' : 'pill-high';
+  document.getElementById('pill-reliability').className = `pill ${relCls}`;
+  document.getElementById('pill-reliability-val').textContent = getReliabilityLabel(scores.brandFactor);
+}
+
+// ── PRICE GAP ALERT ───────────────────────────────────────────────────────────
+function renderPriceGapAlert(askingPrice, estimate) {
+  const el = document.getElementById('price-gap-alert');
+  const main = document.getElementById('price-gap-main');
+  if (!askingPrice || askingPrice <= 0 || !estimate) { el.classList.remove('show'); return; }
+  const diff = Math.abs(askingPrice - estimate);
+  const fmtDiff = '$' + diff.toLocaleString();
+  const fmtAsk  = '$' + askingPrice.toLocaleString();
+  let txt = `A $44.99 history report could protect your ${fmtAsk} investment.`;
+  let sub = '';
+  if (askingPrice > estimate * 1.05) sub = `This car is priced ${fmtDiff} above market — a report could reveal why.`;
+  else if (askingPrice < estimate * 0.95) sub = `This car is priced ${fmtDiff} below market — find out if there's a reason.`;
+  main.innerHTML = txt + (sub ? `<span>${sub}</span>` : '');
+  el.classList.add('show');
+}
+
+// ── INLINE CTA ────────────────────────────────────────────────────────────────
+function updateInlineCTA(score, askingPrice, make, model, year, vin) {
+  const cf  = document.getElementById('link-carfax');
+  const ac  = document.getElementById('link-autocheck');
+  const h3  = document.getElementById('cta-headline');
+  const fmtAsk = askingPrice ? '$' + askingPrice.toLocaleString() : 'your money';
+  const carName = `${year} ${make} ${model}`;
+  if (score <= 40) h3.textContent = 'Looks good — confirm it before you commit.';
+  else if (score <= 60) h3.textContent = `Some concerns found — get the full story before you hand over ${fmtAsk}.`;
+  else h3.textContent = `Don't risk ${fmtAsk} on a car with this many red flags.`;
+  if (vin) {
+    cf.href = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DEV_0&vin=${vin}`;
+    ac.href = `https://www.autocheck.com/vehiclehistory/search.do?vin=${vin}`;
+    cf.textContent = `🛡️ Get ${carName} Carfax Report`;
+    ac.textContent = `📋 Get ${carName} AutoCheck Report`;
+  } else {
+    cf.href = 'https://www.carfax.com'; ac.href = 'https://www.autocheck.com';
+    cf.textContent = '🛡️ Get Carfax Report';
+    ac.textContent = '📋 Get AutoCheck Report';
+  }
+}
+
+function toggleBreakdown(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.breakdown-chevron');
+  const isOpen = chevron.classList.contains('open');
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.classList.toggle('open', !isOpen);
+}
+
 const RELIABILITY_LABELS = [[0,'Excellent'],[10,'Very Good'],[15,'Good'],[20,'Average'],[25,'Below Avg'],[30,'Poor'],[35,'Very Poor']];
 function getReliabilityLabel(s) { let l='Excellent'; for(const [k,v] of RELIABILITY_LABELS){if(s>=k)l=v;} return l; }
 
@@ -964,12 +1078,13 @@ function getBuyVerdict(score, priceClass) {
   return                               { cls:'walkaway',  text:'🚫 Walk Away', body:"Too many issues at this price. We'd hate to see you get burned." };
 }
 
-function renderBuyVerdict(score, priceClass) {
+function renderBuyVerdict(score, priceClass, level) {
   const v = getBuyVerdict(score, priceClass);
   document.getElementById('buy-verdict-wrap').innerHTML = `
     <div class="buy-verdict ${v.cls}">
       <div class="buy-verdict-title">${v.text}</div>
       <div class="buy-verdict-body">${v.body}</div>
+      <div class="buy-verdict-score">Lemon Index: ${score}/100 — ${riskLabel(level)}</div>
     </div>`;
   return v.cls;
 }
@@ -1002,9 +1117,9 @@ function renderNegotiationTips(score, mileage, priceClass, estimatedValue, askin
     <div class="tips-wrap">
       <div class="tips-header" onclick="toggleTips(this)">
         <span class="tips-header-title">💡 Negotiation Tips</span>
-        <span class="tips-chevron open">▾</span>
+        <span class="tips-chevron">▾</span>
       </div>
-      <div class="tips-body">${tipsHTML}</div>
+      <div class="tips-body" style="display:none;">${tipsHTML}</div>
     </div>`;
 }
 
@@ -1063,69 +1178,19 @@ function buildExplanation(make, model, year, mileage, state, sc) {
 // ── ANALYZE ──────────────────────────────────────────────────────────────────
 let lastResult = null;
 function analyze() {
-  const make    = document.getElementById('make').value;
-  const model   = document.getElementById('model').value.trim();
-  const year    = parseInt(document.getElementById('year').value);
-  const mileage = parseInt(document.getElementById('mileage').value);
-  const state   = document.getElementById('state').value;
+  const make        = document.getElementById('make').value;
+  const model       = document.getElementById('model').value.trim();
+  const year        = parseInt(document.getElementById('year').value);
+  const mileage     = parseInt(document.getElementById('mileage').value);
+  const state       = document.getElementById('state').value;
   const askingPrice = parseInt(document.getElementById('asking-price').value) || 0;
-  const vin     = currentVin;
+  const vin         = currentVin;
 
   const scores = calcScore(year, mileage, make, state, selections.driving, selections.owners, selections.accidents, selections.title, selections.service);
   const level  = riskLevel(scores.total);
-  lastResult   = { make, model, year, mileage, state, score: scores.total, level, vin };
 
-  // Show results step
-  currentStep = 4;
-  showStep(4);
-
-  // Banner
-  const banner = document.getElementById('risk-banner');
-  banner.className = `risk-banner ${level}`;
-  const cfg = {
-    fresh:   { emoji:'🍋', label:'Fresh Squeezed', sub:'Excellent shape — still do your due diligence.' },
-    ripe:    { emoji:'🍋', label:'Ripe',            sub:'A decent buy — minor concerns worth checking.' },
-    turning: { emoji:'🍋', label:'Turning',         sub:'Proceed carefully. Get a mechanic inspection.' },
-    sour:    { emoji:'🍋', label:'Gone Sour',       sub:'Significant red flags. Be very cautious.' },
-    lemon:   { emoji:'🍋', label:'Full Lemon',      sub:'Walk away. Serious risk of a bad deal.' },
-  };
-  document.getElementById('risk-dot').textContent   = cfg[level].emoji;
-  document.getElementById('risk-label').textContent = cfg[level].label;
-  document.getElementById('risk-sub').textContent   = cfg[level].sub;
-
-  // Gauge
-  const needleAngle = -90 + (scores.total / 100) * 180;
-  document.getElementById('gauge-needle').style.transform = `rotate(-90deg)`;
-  setTimeout(() => { document.getElementById('gauge-needle').style.transform = `rotate(${needleAngle}deg)`; }, 150);
-
-  // Counter
-  const numEl = document.getElementById('score-number');
-  numEl.classList.remove('show'); numEl.textContent = '0';
-  let current = 0;
-  const step = Math.max(1, Math.ceil(scores.total / 40));
-  setTimeout(() => {
-    numEl.classList.add('show');
-    const t = setInterval(() => { current = Math.min(current+step, scores.total); numEl.textContent=current; if(current>=scores.total)clearInterval(t); }, 25);
-  }, 400);
-
-  // Bars
-  function setBar(barId, valId, raw, max, label) {
-    const pct = Math.round((raw/max)*100);
-    const el = document.getElementById(barId);
-    el.className = `factor-bar ${barClass(pct)}`;
-    setTimeout(() => { el.style.width = pct+'%'; }, 200);
-    document.getElementById(valId).textContent = label;
-  }
-  setBar('bar-age',     'val-age',     scores.ageFactor,     35, scores.ageFactor<=8?'Low':scores.ageFactor<=22?'Medium':'High');
-  setBar('bar-mileage', 'val-mileage', scores.milageFactor,  40, scores.milageFactor<=10?'Low':scores.milageFactor<=26?'Medium':'High');
-  setBar('bar-brand',   'val-brand',   scores.brandFactor,   35, getReliabilityLabel(scores.brandFactor));
-  setBar('bar-history', 'val-history', scores.historyFactor, 50, scores.historyFactor<=8?'Low':scores.historyFactor<=20?'Medium':'High');
-
-  document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, state, scores);
-
-  // Price verdict — capture priceClass for buy verdict
-  let priceClass = null;
-  let estimatedValue = null;
+  // Price class
+  let priceClass = null, estimatedValue = null;
   if (askingPrice > 0) {
     const mv = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service);
     estimatedValue = mv.estimate;
@@ -1136,32 +1201,54 @@ function analyze() {
     else if (pct <= 1.25) priceClass = 'high';
     else                  priceClass = 'danger';
   }
-  renderPriceVerdict(askingPrice, make, model, year, mileage);
 
-  // Buy verdict
-  const verdictCls = renderBuyVerdict(scores.total, priceClass);
+  lastResult = { make, model, year, mileage, state, score: scores.total, level, vin, priceClass };
 
-  // Negotiation tips
-  renderNegotiationTips(scores.total, mileage, priceClass, estimatedValue, askingPrice);
+  currentStep = 4;
+  showStep(4);
 
-  // Celebration banner
-  const celebrate = document.getElementById('celebrate-banner');
-  const isGoodDeal = scores.total <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
-  celebrate.classList.toggle('show', isGoodDeal);
-
-  // Store priceClass for share
-  lastResult.priceClass = priceClass;
+  // S1: Verdict hero
+  const verdictCls = renderBuyVerdict(scores.total, priceClass, level);
   lastResult.verdictCls = verdictCls;
 
-  // VIN chip
-  const chip = document.getElementById('vin-chip');
-  if (vin) { document.getElementById('vin-chip-text').textContent=`VIN: ${vin}`; chip.style.display='inline-flex'; }
-  else chip.style.display='none';
+  // Celebration
+  const isGoodDeal = scores.total <= 40 && (priceClass === 'great' || priceClass === 'fair' || priceClass === null);
+  document.getElementById('celebrate-banner').classList.toggle('show', isGoodDeal);
 
-  // Affiliate links
-  updateAffiliateLinks(vin);
-  updateAffiliateCTA(scores.total);
-  document.getElementById('affiliate').style.display = 'block';
+  // S2: Price gap alert
+  renderPriceGapAlert(askingPrice, estimatedValue);
+
+  // S3: Pills
+  renderPills(scores);
+
+  // S4: Inline CTA
+  updateInlineCTA(scores.total, askingPrice, make, model, year, vin);
+
+  // S5: Price verdict
+  renderPriceVerdict(askingPrice, make, model, year, mileage);
+
+  // S6: Negotiation tips (collapsed by default)
+  renderNegotiationTips(scores.total, mileage, priceClass, estimatedValue, askingPrice);
+
+  // S7: Full breakdown
+  document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, state, scores);
+  const chip = document.getElementById('vin-chip');
+  if (vin) { document.getElementById('vin-chip-text').textContent = `VIN: ${vin}`; chip.style.display = 'inline-flex'; }
+  else chip.style.display = 'none';
+  document.getElementById('breakdown-wrap').style.display = 'block';
+
+  // Factor bars (in breakdown)
+  function setBar(barId, valId, raw, max, label) {
+    const pct = Math.round((raw/max)*100);
+    const el = document.getElementById(barId);
+    el.className = `factor-bar ${barClass(pct)}`;
+    setTimeout(() => { el.style.width = pct+'%'; }, 400);
+    document.getElementById(valId).textContent = label;
+  }
+  setBar('bar-age',     'val-age',     scores.ageFactor,     35, scores.ageFactor<=8?'Low':scores.ageFactor<=22?'Medium':'High');
+  setBar('bar-mileage', 'val-mileage', scores.milageFactor,  40, scores.milageFactor<=10?'Low':scores.milageFactor<=26?'Medium':'High');
+  setBar('bar-brand',   'val-brand',   scores.brandFactor,   35, getReliabilityLabel(scores.brandFactor));
+  setBar('bar-history', 'val-history', scores.historyFactor, 50, scores.historyFactor<=8?'Low':scores.historyFactor<=20?'Medium':'High');
 }
 
 function updateAffiliateLinks(vin) {
@@ -1181,13 +1268,12 @@ function updateAffiliateLinks(vin) {
 function startOver() {
   currentStep = 1;
   showStep(1);
-  document.getElementById('affiliate').style.display = 'none';
   document.getElementById('price-verdict-wrap').style.display = 'none';
+  document.getElementById('breakdown-wrap').style.display = 'none';
   document.getElementById('buy-verdict-wrap').innerHTML = '';
   document.getElementById('tips-wrap-outer').innerHTML = '';
+  document.getElementById('price-gap-alert').classList.remove('show');
   document.getElementById('celebrate-banner').classList.remove('show');
-  document.getElementById('score-number').classList.remove('show');
-  document.getElementById('gauge-needle').style.transform = 'rotate(-90deg)';
   document.querySelectorAll('.factor-bar').forEach(b => b.style.width='0');
   document.getElementById('progress-wrap').style.display = 'block';
 }
