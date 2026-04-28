@@ -120,17 +120,23 @@ input.error, select.error { border-color: var(--red); }
 
 /* RESULTS */
 .risk-banner { border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
-.risk-banner.low    { background: var(--green-bg);  border: 1.5px solid #BBF7D0; }
-.risk-banner.medium { background: var(--yellow-bg); border: 1.5px solid #FDE68A; }
-.risk-banner.high   { background: var(--red-bg);    border: 1.5px solid #FECACA; }
+.risk-banner.fresh   { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+.risk-banner.ripe    { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.risk-banner.turning { background: #FEFCE8; border: 1.5px solid #FEF08A; }
+.risk-banner.sour    { background: #FFF7ED; border: 1.5px solid #FED7AA; }
+.risk-banner.lemon   { background: #FFF1F2; border: 1.5px solid #FECDD3; }
 .risk-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.low .risk-dot    { background: #DCFCE7; }
-.medium .risk-dot { background: #FEF3C7; }
-.high .risk-dot   { background: #FEE2E2; }
+.fresh   .risk-dot { background: #DCFCE7; }
+.ripe    .risk-dot { background: #DBEAFE; }
+.turning .risk-dot { background: #FEF9C3; }
+.sour    .risk-dot { background: #FFEDD5; }
+.lemon   .risk-dot { background: #FFE4E6; }
 .risk-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
-.low .risk-label    { color: #15803D; }
-.medium .risk-label { color: #B45309; }
-.high .risk-label   { color: #B91C1C; }
+.fresh   .risk-label { color: #15803D; }
+.ripe    .risk-label { color: #1D4ED8; }
+.turning .risk-label { color: #A16207; }
+.sour    .risk-label { color: #C2410C; }
+.lemon   .risk-label { color: #BE123C; }
 .risk-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
 .score-wrap { text-align: center; margin-bottom: 22px; }
 .gauge-container { position: relative; width: 180px; height: 100px; margin: 0 auto 12px; overflow: hidden; }
@@ -210,7 +216,7 @@ footer a { color: var(--gray-300); }
 <div class="hero">
   <div class="hero-eyebrow">🔍 Free Instant Analysis</div>
   <h1>Is that car a <em>lemon?</em></h1>
-  <p>Answer a few quick questions and get an instant risk score — before you hand over a dime.</p>
+  <p>We sniff out lemons so you don't have to. Answer a few quick questions and get your Lemon Index score instantly — before you hand over a dime.</p>
 </div>
 
 <main>
@@ -385,7 +391,7 @@ footer a { color: var(--gray-300); }
 
   <!-- STEP 4: RESULTS -->
   <div class="card step-panel" id="step-4">
-    <div class="card-title"><div class="icon">📊</div>Lemon Risk Score</div>
+    <div class="card-title"><div class="icon">🍋</div>Lemon Index</div>
     <div id="vin-chip" class="vin-chip" style="display:none;">🔍 <span id="vin-chip-text"></span></div>
     <div id="risk-banner" class="risk-banner low">
       <div class="risk-dot" id="risk-dot">✅</div>
@@ -402,7 +408,7 @@ footer a { color: var(--gray-300); }
         <div class="gauge-center"></div>
       </div>
       <div class="score-number" id="score-number">0</div>
-      <div class="score-label">out of 100 &nbsp;•&nbsp; higher = riskier</div>
+      <div class="score-label">out of 100 &nbsp;•&nbsp; higher = more lemon</div>
     </div>
     <div class="breakdown-title">Risk Factors</div>
     <div class="factor-row"><span class="factor-label">Age</span><div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div><span class="factor-val" id="val-age">—</span></div>
@@ -420,8 +426,8 @@ footer a { color: var(--gray-300); }
 
   <!-- AFFILIATE (shown with results) -->
   <div class="card affiliate-card" id="affiliate" style="display:none;">
-    <h2>Get the Full Picture</h2>
-    <p>Our score is a starting point. A full vehicle history report reveals accidents, title issues, odometer fraud, and previous owners — things our score can't see.</p>
+    <h2>Think it might be a lemon?</h2>
+    <p>Get the full story before someone squeezes you. A vehicle history report reveals accidents, title issues, odometer fraud, and more.</p>
     <div class="affiliate-buttons">
       <a id="link-carfax" href="https://www.carfax.com" target="_blank" rel="noopener" class="btn-affiliate btn-carfax">🛡️ Check on Carfax</a>
       <a id="link-autocheck" href="https://www.autocheck.com" target="_blank" rel="noopener" class="btn-affiliate btn-autocheck">📋 Check on AutoCheck</a>
@@ -809,26 +815,26 @@ function getPriceVerdict(askingPrice, low, high, estimate, make, model, year, ti
 
   if (title === 'salvage' || title === 'lemon') {
     if (pctOfEstimate > 0.70) {
-      cls='danger'; icon='🚨'; title_v='Overpriced for Title Type';
+      cls='danger'; icon='🚨'; title_v="Someone's Getting Juiced";
       note = `Salvage and lemon law vehicles typically sell for 40–55% of clean-title market value. This asking price is too high given the title status.`;
     } else {
-      cls='fair'; icon='⚠️'; title_v='Price Reflects Title Discount';
+      cls='fair'; icon='✅'; title_v='Fair Squeeze';
       note = `The price accounts for the title issue. Still — always get an independent inspection and full history report before buying.`;
     }
   } else if (pctOfEstimate < 0.75) {
-    cls='danger'; icon='🚨'; title_v='Suspiciously Underpriced';
+    cls='danger'; icon='🚨'; title_v='Something Smells Sour';
     note = `This car is priced ${Math.round((1-pctOfEstimate)*100)}% below estimated market value. Prices this low are often a red flag — possible hidden damage, title issues, or mechanical problems not disclosed. Get a full Carfax report and mechanic inspection before proceeding.`;
   } else if (pctOfEstimate < 0.90) {
-    cls='great'; icon='💚'; title_v='Great Deal — Below Market';
+    cls='great'; icon='💚'; title_v='Sweet Deal';
     note = `This price is ${Math.round((1-pctOfEstimate)*100)}% below the estimated market range. Could be a motivated seller or a hidden issue — either way, worth investigating further with a history report.`;
   } else if (pctOfEstimate <= 1.10) {
-    cls='fair'; icon='✅'; title_v='Fair Market Price';
+    cls='fair'; icon='✅'; title_v='Fair Squeeze';
     note = `This asking price falls within the expected market range for a ${year} ${make} ${model}. Neither a steal nor overpriced.`;
   } else if (pctOfEstimate <= 1.25) {
-    cls='high'; icon='⚠️'; title_v='Slightly Overpriced';
+    cls='high'; icon='⚠️'; title_v='Paying for the Peel';
     note = `This is ${Math.round((pctOfEstimate-1)*100)}% above our estimated market value. You may have room to negotiate — use the market range as leverage.`;
   } else {
-    cls='danger'; icon='🚨'; title_v='Significantly Overpriced';
+    cls='danger'; icon='🚨'; title_v="Someone's Getting Juiced";
     note = `This asking price is ${Math.round((pctOfEstimate-1)*100)}% above estimated market value. Unless this vehicle has exceptional condition, low miles, or rare features, this price is hard to justify.`;
   }
   return { cls, icon, title_v, note };
@@ -901,8 +907,12 @@ function calcScore(year, mileage, make, state, driving, owners, accidents, title
   return { total, ageFactor, milageFactor, brandFactor, historyFactor };
 }
 
-function riskLevel(s) { return s<35?'low':s<65?'medium':'high'; }
+function riskLevel(s) { return s<=20?'fresh':s<=40?'ripe':s<=60?'turning':s<=80?'sour':'lemon'; }
 function barClass(p)  { return p<35?'low-risk':p<65?'medium-risk':'high-risk'; }
+
+function riskLabel(level) {
+  return { fresh:'Fresh Squeezed', ripe:'Ripe', turning:'Turning', sour:'Gone Sour', lemon:'Full Lemon' }[level];
+}
 
 function buildExplanation(make, model, year, mileage, state, sc) {
   const age = new Date().getFullYear() - year;
@@ -954,9 +964,11 @@ function analyze() {
   const banner = document.getElementById('risk-banner');
   banner.className = `risk-banner ${level}`;
   const cfg = {
-    low:    { emoji:'✅', label:'Low Risk',    sub:'Looks like a solid buy — still do your due diligence.' },
-    medium: { emoji:'⚠️', label:'Medium Risk', sub:'Some concerns. Get a mechanic inspection before buying.' },
-    high:   { emoji:'🚨', label:'High Risk',   sub:'Significant red flags. Proceed with extreme caution.' },
+    fresh:   { emoji:'🍋', label:'Fresh Squeezed', sub:'Excellent shape — still do your due diligence.' },
+    ripe:    { emoji:'🍋', label:'Ripe',            sub:'A decent buy — minor concerns worth checking.' },
+    turning: { emoji:'🍋', label:'Turning',         sub:'Proceed carefully. Get a mechanic inspection.' },
+    sour:    { emoji:'🍋', label:'Gone Sour',       sub:'Significant red flags. Be very cautious.' },
+    lemon:   { emoji:'🍋', label:'Full Lemon',      sub:'Walk away. Serious risk of a bad deal.' },
   };
   document.getElementById('risk-dot').textContent   = cfg[level].emoji;
   document.getElementById('risk-label').textContent = cfg[level].label;
@@ -1034,7 +1046,7 @@ function shareResult() {
   if (!lastResult) return;
   const { make, model, year, mileage, score, level, vin } = lastResult;
   const vinPart = vin ? ` | VIN: ${vin}` : '';
-  const text = `🍋 Lemonhead Risk Score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${level.toUpperCase()} RISK. Try it free at lemonhead.app`;
+  const text = `🍋 Lemonhead score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${riskLabel(level)}. Check your car free at lemonhead.app`;
   if (navigator.share) navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
   else copyText(text);
 }
