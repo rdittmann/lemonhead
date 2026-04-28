@@ -371,11 +371,14 @@ footer a { color: var(--gray-300); }
       </div>
 
       <div class="form-group full">
-        <label style="font-family:'DM Sans',sans-serif;line-height:1.6;">Trim Level</label>
-        <div class="btn-group" id="grp-trim">
-          <button class="btn-group-item safe" data-val="base" onclick="selectGroup(this,'trim')">Base / Standard</button>
-          <button class="btn-group-item selected" data-val="mid" onclick="selectGroup(this,'trim')">Mid / Sport</button>
-          <button class="btn-group-item warning" data-val="premium" onclick="selectGroup(this,'trim')">Premium / Top Trim</button>
+        <label style="font-family:'DM Sans',sans-serif;line-height:1.6;">Trim Level <span style="color:var(--gray-300);font-weight:400;">(optional)</span></label>
+        <div class="select-wrap">
+          <select id="trim" onchange="selections.trim = this.value">
+            <option value="">Select trim…</option>
+            <option value="base">Base / Standard</option>
+            <option value="mid">Mid / Sport</option>
+            <option value="premium">Premium / Top Trim</option>
+          </select>
         </div>
       </div>
     </div>
@@ -591,7 +594,7 @@ footer a { color: var(--gray-300); }
 // ── STATE ────────────────────────────────────────────────────────────────────
 let currentVin = '';
 let vinDebounceTimer = null;
-const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full', trim: 'mid' };
+const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full', trim: '' };
 
 // ── MAKES & MODELS ───────────────────────────────────────────────────────────
 const MAKES = ['Acura','Audi','BMW','Buick','Cadillac','Chevrolet','Chrysler','Dodge','Ford','GMC','Honda','Hyundai','Infiniti','Jeep','Kia','Lexus','Lincoln','Mazda','Mercedes-Benz','Mitsubishi','Nissan','Ram','Subaru','Toyota','Volkswagen','Volvo','Other'].sort((a,b) => a==='Other'?1:b==='Other'?-1:a.localeCompare(b));
@@ -953,7 +956,7 @@ function estimateMarketValue(make, model, year, mileage, accidents, title, servi
     estimate = Math.round(estimate * luxMult / 100) * 100;
   }
 
-  // Trim level adjustment
+  // Trim level adjustment (optional — empty string means no adjustment)
   if      (trim === 'base')    estimate = Math.round(estimate * 0.90 / 100) * 100;
   else if (trim === 'premium') estimate = Math.round(estimate * 1.15 / 100) * 100;
 
