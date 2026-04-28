@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lemonhead — Used Car Risk Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1628;
+    --navy-mid: #112240;
+    --navy-light: #1B3461;
+    --blue: #1E6FD9;
+    --blue-light: #4A9EFF;
+    --accent: #F5C842;
+    --white: #FFFFFF;
+    --off-white: #F4F6FA;
+    --gray-100: #E8ECF4;
+    --gray-300: #B0BAD0;
+    --gray-500: #6B7A99;
+    --green: #22C55E;
+    --yellow: #F59E0B;
+    --red: #EF4444;
+    --green-bg: #F0FDF4;
+    --yellow-bg: #FFFBEB;
+    --red-bg: #FEF2F2;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 4px 24px rgba(10,22,40,0.10);
+    --shadow-lg: 0 12px 48px rgba(10,22,40,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--navy); min-height: 100vh; overflow-x: hidden; }
+  header { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); letter-spacing: -0.5px; }
+  .logo-text span { color: var(--accent); }
+  .header-badge { font-size: 11px; font-weight: 500; color: var(--gray-300); letter-spacing: 0.5px; text-transform: uppercase; }
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0F2952 100%); padding: 64px 24px 80px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(30,111,217,0.18) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(245,200,66,0.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: rgba(30,111,217,0.18); border: 1px solid rgba(74,158,255,0.25); color: var(--blue-light); font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; }
+  .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 56px); color: var(--white); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { font-size: 17px; color: var(--gray-300); line-height: 1.6; max-width: 520px; margin: 0 auto; font-weight: 300; }
+  main { max-width: 700px; margin: -36px auto 0; padding: 0 16px 64px; position: relative; z-index: 2; }
+  .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 36px 32px; margin-bottom: 20px; }
+  @media (max-width: 500px) { .card { padding: 24px 18px; } }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { width: 32px; height: 32px; background: var(--off-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  label { font-size: 13px; font-weight: 500; color: var(--gray-500); letter-spacing: 0.2px; }
+  select, input { width: 100%; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--navy); background: var(--off-white); border: 1.5px solid var(--gray-100); border-radius: var(--radius-sm); outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none; }
+  .select-wrap { position: relative; }
+  .select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-500); pointer-events: none; font-size: 13px; }
+  select:focus, input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,111,217,0.12); background: var(--white); }
+  input::placeholder { color: var(--gray-300); }
+  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .btn-primary { width: 100%; padding: 15px 24px; background: var(--blue); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.3px; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-primary:hover { background: #1560c4; box-shadow: 0 6px 20px rgba(30,111,217,0.35); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  #result { display: none; }
+  #result.visible { display: block; animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  .risk-banner { border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .risk-banner.low    { background: var(--green-bg);  border: 1.5px solid #BBF7D0; }
+  .risk-banner.medium { background: var(--yellow-bg); border: 1.5px solid #FDE68A; }
+  .risk-banner.high   { background: var(--red-bg);    border: 1.5px solid #FECACA; }
+  .risk-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .low .risk-dot    { background: #DCFCE7; }
+  .medium .risk-dot { background: #FEF3C7; }
+  .high .risk-dot   { background: #FEE2E2; }
+  .risk-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+  .low .risk-label    { color: #15803D; }
+  .medium .risk-label { color: #B45309; }
+  .high .risk-label   { color: #B91C1C; }
+  .risk-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .score-wrap { text-align: center; margin-bottom: 24px; }
+  .gauge-container { position: relative; width: 180px; height: 100px; margin: 0 auto 12px; overflow: hidden; }
+  .gauge-bg { width: 180px; height: 180px; border-radius: 90px 90px 0 0; background: conic-gradient(from 180deg, var(--green) 0deg 60deg, var(--yellow) 60deg 120deg, var(--red) 120deg 180deg); position: absolute; bottom: 0; left: 0; }
+  .gauge-cover { width: 140px; height: 140px; background: var(--white); border-radius: 50%; position: absolute; bottom: -70px; left: 20px; }
+  .gauge-needle { width: 3px; height: 70px; background: var(--navy); border-radius: 3px 3px 0 0; position: absolute; bottom: 0; left: calc(50% - 1.5px); transform-origin: bottom center; transform: rotate(-90deg); transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .gauge-center { width: 12px; height: 12px; background: var(--navy); border-radius: 50%; position: absolute; bottom: -6px; left: calc(50% - 6px); }
+  .score-number { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 48px; line-height: 1; color: var(--navy); letter-spacing: -2px; opacity: 0; transition: opacity 0.4s 0.6s; }
+  .score-number.show { opacity: 1; }
+  .score-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+  .breakdown-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .factor-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14px; }
+  .factor-label { flex: 0 0 90px; color: var(--gray-500); }
+  .factor-bar-wrap { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+  .factor-bar { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s; width: 0; }
+  .factor-bar.low-risk    { background: var(--green); }
+  .factor-bar.medium-risk { background: var(--yellow); }
+  .factor-bar.high-risk   { background: var(--red); }
+  .factor-val { font-weight: 500; color: var(--navy); min-width: 80px; text-align: right; font-size: 13px; }
+  .explanation { background: var(--off-white); border-radius: var(--radius-sm); padding: 16px 18px; font-size: 14px; line-height: 1.65; color: var(--gray-500); margin-top: 20px; }
+  .explanation strong { color: var(--navy); }
+  .btn-share { width: 100%; padding: 12px; background: transparent; color: var(--blue); font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; border: 1.5px solid var(--blue); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
+  .btn-share:hover { background: rgba(30,111,217,0.06); }
+  .affiliate-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: var(--radius); padding: 32px; color: var(--white); margin-bottom: 20px; }
+  .affiliate-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .affiliate-card p { font-size: 14px; color: var(--gray-300); margin-bottom: 24px; line-height: 1.6; font-weight: 300; }
+  .affiliate-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 440px) { .affiliate-buttons { grid-template-columns: 1fr; } }
+  .btn-affiliate { padding: 14px 16px; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
+  .btn-carfax { background: var(--accent); color: var(--navy); }
+  .btn-carfax:hover { background: #f0bc2a; transform: translateY(-1px); }
+  .btn-autocheck { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+  .btn-autocheck:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+  .affiliate-note { font-size: 11px; color: var(--gray-500); margin-top: 10px; text-align: center; }
+  .trust-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; padding: 20px 0 4px; }
+  .trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
+  .trust-item span { font-size: 14px; }
+  footer { text-align: center; padding: 24px 16px 40px; font-size: 12px; color: var(--gray-300); line-height: 1.7; }
+  footer a { color: var(--gray-300); }
+  .error-msg { font-size: 13px; color: var(--red); margin-top: 6px; display: none; }
+  .error-msg.show { display: block; }
+  input.error, select.error { border-color: var(--red); }
+
+  /* ── VIN SECTION ── */
+  .vin-section {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1.5px dashed var(--gray-100);
+  }
+  .vin-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+  .vin-label-row label { margin-bottom: 0; }
+  .vin-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: rgba(30,111,217,0.08);
+    border: 1px solid rgba(30,111,217,0.18);
+    padding: 3px 8px;
+    border-radius: 100px;
+  }
+  .vin-input-wrap { position: relative; }
+  .vin-input-wrap input { padding-right: 48px; font-family: 'DM Sans', monospace; letter-spacing: 0.5px; text-transform: uppercase; }
+  .vin-input-wrap input::placeholder { text-transform: none; letter-spacing: normal; }
+  .vin-status {
+    position: absolute;
+    right: 13px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .vin-hint {
+    font-size: 12px;
+    color: var(--gray-300);
+    margin-top: 6px;
+  }
+  .vin-success {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #15803D;
+    font-weight: 500;
+  }
+  .vin-success.show { display: flex; }
+  .vin-error-msg {
+    font-size: 13px;
+    color: var(--red);
+    margin-top: 6px;
+    display: none;
+  }
+  .vin-error-msg.show { display: block; }
+
+  /* Spinner */
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+  .vin-status.spinning {
+    width: 16px; height: 16px;
+    border: 2px solid var(--gray-100);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    right: 14px;
+    animation: spin 0.7s linear infinite;
+    font-size: 0;
+  }
+  /* VIN badge on result */
+  .vin-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--off-white);
+    border: 1px solid var(--gray-100);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--gray-500);
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🍋</div>
+      <span class="logo-text">Lemon<span>head</span></span>
+    </a>
+    <span class="header-badge">Used Car Risk Analyzer</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">🔍 Free Instant Analysis</div>
+  <h1>Is that car a <em>lemon?</em></h1>
+  <p>Enter the car details below and we'll calculate a risk score in seconds — before you hand over a dime.</p>
+</div>
+
+<main>
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">🚗</div>
+      Vehicle Details
+    </div>
+    <!-- VIN LOOKUP -->
+    <div class="vin-section">
+      <div class="vin-label-row">
+        <label for="vin">VIN Number</label>
+        <span class="vin-badge">Auto-fills form</span>
+      </div>
+      <div class="vin-input-wrap">
+        <input type="text" id="vin" placeholder="e.g. 1HGBH41JXMN109186" maxlength="17" autocomplete="off" oninput="onVinInput(this)">
+        <span class="vin-status" id="vin-status"></span>
+      </div>
+      <div class="vin-hint">Optional — 17-character VIN auto-fills make, model &amp; year via NHTSA.</div>
+      <div class="vin-success" id="vin-success">✅ <span id="vin-success-text">VIN decoded successfully</span></div>
+      <div class="vin-error-msg" id="vin-error"></div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="make">Make</label>
+        <div class="select-wrap">
+          <select id="make">
+            <option value="">Select make…</option>
+            <option>Toyota</option><option>Honda</option><option>Mazda</option>
+            <option>Subaru</option><option>Hyundai</option><option>Kia</option>
+            <option>Chevrolet</option><option>Ford</option><option>Dodge</option>
+            <option>Chrysler</option><option>Jeep</option><option>GMC</option>
+            <option>Nissan</option><option>Volkswagen</option><option>BMW</option>
+            <option>Mercedes-Benz</option><option>Audi</option><option>Lexus</option>
+            <option>Acura</option><option>Infiniti</option><option>Cadillac</option>
+            <option>Lincoln</option><option>Ram</option><option>Buick</option>
+            <option>Volvo</option><option>Mitsubishi</option><option>Other</option>
+          </select>
+        </div>
+        <span class="error-msg" id="err-make">Please select a make.</span>
+      </div>
+      <div class="form-group">
+        <label for="model">Model</label>
+        <input type="text" id="model" placeholder="e.g. Camry, F-150…" maxlength="40">
+        <span class="error-msg" id="err-model">Please enter a model.</span>
+      </div>
+      <div class="form-group">
+        <label for="year">Year</label>
+        <input type="number" id="year" placeholder="e.g. 2018" min="1980" max="2025">
+        <span class="error-msg" id="err-year">Enter a year between 1980–2025.</span>
+      </div>
+      <div class="form-group">
+        <label for="mileage">Mileage</label>
+        <input type="number" id="mileage" placeholder="e.g. 72000" min="0" max="500000">
+        <span class="error-msg" id="err-mileage">Enter a valid mileage (0–500,000).</span>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="analyze()">🔍 Analyze This Car</button>
+  </div>
+
+  <div class="card" id="result">
+    <div class="card-title">
+      <div class="icon">📊</div>
+      Lemon Risk Score
+    </div>
+    <div id="vin-chip" class="vin-chip" style="display:none;">🔍 <span id="vin-chip-text"></span></div>
+    <div id="risk-banner" class="risk-banner low">
+      <div class="risk-dot" id="risk-dot">✅</div>
+      <div>
+        <div class="risk-label" id="risk-label">Low Risk</div>
+        <div class="risk-sub" id="risk-sub">—</div>
+      </div>
+    </div>
+    <div class="score-wrap">
+      <div class="gauge-container">
+        <div class="gauge-bg"></div>
+        <div class="gauge-cover"></div>
+        <div class="gauge-needle" id="gauge-needle"></div>
+        <div class="gauge-center"></div>
+      </div>
+      <div class="score-number" id="score-number">0</div>
+      <div class="score-label">out of 100 &nbsp;•&nbsp; higher = riskier</div>
+    </div>
+    <div class="breakdown-title">Risk Factors</div>
+    <div class="factor-row">
+      <span class="factor-label">Age</span>
+      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-age"></div></div>
+      <span class="factor-val" id="val-age">—</span>
+    </div>
+    <div class="factor-row">
+      <span class="factor-label">Mileage</span>
+      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-mileage"></div></div>
+      <span class="factor-val" id="val-mileage">—</span>
+    </div>
+    <div class="factor-row">
+      <span class="factor-label">Reliability</span>
+      <div class="factor-bar-wrap"><div class="factor-bar" id="bar-brand"></div></div>
+      <span class="factor-val" id="val-brand">—</span>
+    </div>
+    <div class="explanation" id="explanation"></div>
+    <button class="btn-share" onclick="shareResult()">🔗 Share This Result</button>
+  </div>
+
+  <div class="card affiliate-card" id="affiliate" style="display:none;">
+    <h2>Get the Full Picture</h2>
+    <p>Our score is a starting point. A full vehicle history report reveals accidents, title issues, odometer fraud, and previous owners — things our score can't see.</p>
+    <div class="affiliate-buttons">
+      <a id="link-carfax" href="https://www.carfax.com" target="_blank" rel="noopener" class="btn-affiliate btn-carfax">🛡️ Check on Carfax</a>
+      <a id="link-autocheck" href="https://www.autocheck.com" target="_blank" rel="noopener" class="btn-affiliate btn-autocheck">📋 Check on AutoCheck</a>
+    </div>
+    <div class="affiliate-note">Affiliate links — we may earn a commission at no cost to you.</div>
+  </div>
+
+  <div class="trust-row">
+    <div class="trust-item"><span>🔒</span> No data stored</div>
+    <div class="trust-item"><span>⚡</span> Instant results</div>
+    <div class="trust-item"><span>💸</span> 100% free</div>
+    <div class="trust-item"><span>📱</span> Works on mobile</div>
+  </div>
+</main>
+
+<footer>
+  <p>Lemonhead is an informational tool only. Scores are estimates based on general reliability data.<br>
+  Always get a professional inspection and full history report before purchasing.<br>
+  <a href="#">Privacy</a> · <a href="#">Terms</a> · © 2025 Lemonhead</p>
+</footer>
+
+<script>
+// ── VIN LOOKUP ──────────────────────────────────────────────────────────────
+let vinDebounceTimer = null;
+let currentVin = '';
+
+function onVinInput(el) {
+  const raw = el.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  el.value = raw;
+  clearTimeout(vinDebounceTimer);
+  resetVinUI();
+
+  if (raw.length === 0) return;
+  if (raw.length < 17) {
+    setVinStatus('');
+    return;
+  }
+  if (raw.length === 17) {
+    setVinStatus('spinning');
+    vinDebounceTimer = setTimeout(() => decodeVin(raw), 400);
+  }
+}
+
+function resetVinUI() {
+  currentVin = '';
+  setVinStatus('');
+  document.getElementById('vin-success').classList.remove('show');
+  document.getElementById('vin-error').classList.remove('show');
+  document.getElementById('vin-error').textContent = '';
+}
+
+function setVinStatus(state) {
+  const el = document.getElementById('vin-status');
+  el.className = 'vin-status';
+  if (state === 'spinning') { el.classList.add('spinning'); el.textContent = ''; }
+  else if (state === 'ok')   { el.textContent = '✅'; }
+  else if (state === 'err')  { el.textContent = '❌'; }
+  else                       { el.textContent = ''; }
+}
+
+async function decodeVin(vin) {
+  try {
+    const url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Network error');
+    const data = await res.json();
+    const r = data.Results?.[0];
+    if (!r || r.ErrorCode?.startsWith('11') || r.ErrorCode === '8') {
+      throw new Error('VIN not found');
+    }
+    // Pull fields
+    const make  = r.Make  ? titleCase(r.Make)  : '';
+    const model = r.Model ? titleCase(r.Model) : '';
+    const year  = r.ModelYear ? parseInt(r.ModelYear) : null;
+
+    if (!make && !model && !year) throw new Error('Could not decode VIN');
+
+    // Auto-fill form
+    if (make)  setSelectValue('make', make);
+    if (model) document.getElementById('model').value = model;
+    if (year && year >= 1980 && year <= new Date().getFullYear()) {
+      document.getElementById('year').value = year;
+    }
+
+    // Clear any field errors that were filled
+    ['make','model','year'].forEach(id => {
+      document.getElementById(id).classList.remove('error');
+      const e = document.getElementById('err-'+id);
+      if (e) e.classList.remove('show');
+    });
+
+    currentVin = vin;
+    setVinStatus('ok');
+    const filled = [make, model, year].filter(Boolean).join(' ');
+    document.getElementById('vin-success-text').textContent = `Decoded: ${filled}`;
+    document.getElementById('vin-success').classList.add('show');
+  } catch (err) {
+    setVinStatus('err');
+    const errEl = document.getElementById('vin-error');
+    errEl.textContent = 'Could not decode this VIN. Please fill in the details manually.';
+    errEl.classList.add('show');
+  }
+}
+
+function titleCase(str) {
+  // Handle known all-caps brand names
+  const upper = ['BMW','GMC','RAM','KIA'];
+  if (upper.includes(str.toUpperCase())) return str.toUpperCase();
+  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function setSelectValue(id, value) {
+  const sel = document.getElementById(id);
+  // Try exact match first, then case-insensitive
+  for (const opt of sel.options) {
+    if (opt.value.toLowerCase() === value.toLowerCase()) {
+      sel.value = opt.value;
+      return;
+    }
+  }
+  // No match — set "Other"
+  sel.value = 'Other';
+}
+
+function updateAffiliateLinks(vin) {
+  const carfax    = document.getElementById('link-carfax');
+  const autocheck = document.getElementById('link-autocheck');
+  if (vin) {
+    carfax.href    = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DEV_0&vin=${vin}`;
+    autocheck.href = `https://www.autocheck.com/vehiclehistory/search.do?vin=${vin}`;
+    carfax.innerHTML    = '🛡️ Carfax Report for this VIN';
+    autocheck.innerHTML = '📋 AutoCheck Report for this VIN';
+  } else {
+    carfax.href    = 'https://www.carfax.com';
+    autocheck.href = 'https://www.autocheck.com';
+    carfax.innerHTML    = '🛡️ Check on Carfax';
+    autocheck.innerHTML = '📋 Check on AutoCheck';
+  }
+}
+
+const RELIABILITY = {
+  'toyota':5,'lexus':7,'honda':8,'acura':10,'mazda':9,'subaru':13,'hyundai':14,'kia':15,
+  'nissan':17,'mitsubishi':18,'volkswagen':20,'buick':19,'chevrolet':21,'gmc':21,'ford':22,
+  'ram':22,'volvo':21,'infiniti':18,'bmw':27,'audi':28,'mercedes-benz':25,'cadillac':27,
+  'lincoln':25,'jeep':31,'dodge':32,'chrysler':35,'other':23
+};
+const RELIABILITY_LABELS = [
+  [0,'Excellent'],[10,'Very Good'],[15,'Good'],[20,'Average'],[25,'Below Avg'],[30,'Poor'],[35,'Very Poor']
+];
+function getReliabilityLabel(score) {
+  let label = 'Excellent';
+  for (const [k,v] of RELIABILITY_LABELS) { if (score >= k) label = v; }
+  return label;
+}
+function calcScore(year, mileage, make) {
+  const age = new Date().getFullYear() - year;
+  let ageFactor = age <= 2 ? 3 : age <= 4 ? 8 : age <= 6 ? 14 : age <= 10 ? 22 : age <= 15 ? 29 : 35;
+  let milageFactor = mileage < 20000 ? 4 : mileage < 50000 ? 10 : mileage < 80000 ? 17 : mileage < 120000 ? 26 : mileage < 160000 ? 34 : 40;
+  const brandFactor = RELIABILITY[make.toLowerCase()] ?? 23;
+  const total = Math.min(100, ageFactor + milageFactor + brandFactor);
+  return { total, ageFactor, milageFactor, brandFactor };
+}
+function riskLevel(s) { return s < 35 ? 'low' : s < 65 ? 'medium' : 'high'; }
+function barClass(p)  { return p < 35 ? 'low-risk' : p < 65 ? 'medium-risk' : 'high-risk'; }
+function buildExplanation(make, model, year, mileage, scores) {
+  const age = new Date().getFullYear() - year;
+  const relLabel = getReliabilityLabel(scores.brandFactor);
+  const parts = [];
+  if (scores.milageFactor >= 26) parts.push(`High mileage (${mileage.toLocaleString()} mi) significantly increases wear and repair risk.`);
+  else if (scores.milageFactor >= 10) parts.push(`Moderate mileage (${mileage.toLocaleString()} mi) is within the normal range for its age.`);
+  else parts.push(`Low mileage (${mileage.toLocaleString()} mi) is a strong positive signal.`);
+  if (scores.ageFactor >= 22) parts.push(`At ${age} years old, this car may be approaching the age where major repairs become common.`);
+  else if (scores.ageFactor >= 8) parts.push(`Age (${age} yrs) is a moderate factor — most systems are proven but worth a mechanic's check.`);
+  else parts.push(`It's relatively new at ${age} years old — age adds minimal risk.`);
+  parts.push(`<strong>${make}</strong> carries a reliability rating of <strong>${relLabel}</strong> based on industry data.`);
+  return parts.join(' ');
+}
+function validate() {
+  let ok = true;
+  const checks = [
+    { id:'make',    err:'err-make',    test: v => v !== '' },
+    { id:'model',   err:'err-model',   test: v => v.trim().length > 0 },
+    { id:'year',    err:'err-year',    test: v => { const n=parseInt(v); return !isNaN(n) && n>=1980 && n<=new Date().getFullYear(); }},
+    { id:'mileage', err:'err-mileage', test: v => { const n=parseInt(v); return !isNaN(n) && n>=0 && n<=500000; }},
+  ];
+  for (const c of checks) {
+    const el = document.getElementById(c.id);
+    const errEl = document.getElementById(c.err);
+    if (!c.test(el.value)) { el.classList.add('error'); errEl.classList.add('show'); ok = false; }
+    else { el.classList.remove('error'); errEl.classList.remove('show'); }
+  }
+  return ok;
+}
+let lastResult = null;
+function analyze() {
+  if (!validate()) return;
+  const make    = document.getElementById('make').value;
+  const model   = document.getElementById('model').value.trim();
+  const year    = parseInt(document.getElementById('year').value);
+  const mileage = parseInt(document.getElementById('mileage').value);
+  const vin     = currentVin; // from VIN lookup
+  const scores  = calcScore(year, mileage, make);
+  const level   = riskLevel(scores.total);
+  lastResult    = { make, model, year, mileage, score: scores.total, level, vin };
+  const banner  = document.getElementById('risk-banner');
+  banner.className = `risk-banner ${level}`;
+  const cfg = {
+    low:    { emoji:'✅', label:'Low Risk',    sub:'Looks like a solid buy — still do your due diligence.' },
+    medium: { emoji:'⚠️', label:'Medium Risk', sub:'Some concerns. Get a mechanic inspection before buying.' },
+    high:   { emoji:'🚨', label:'High Risk',   sub:'Significant red flags. Proceed with extreme caution.' },
+  };
+  document.getElementById('risk-dot').textContent   = cfg[level].emoji;
+  document.getElementById('risk-label').textContent = cfg[level].label;
+  document.getElementById('risk-sub').textContent   = cfg[level].sub;
+  const needleAngle = -90 + (scores.total / 100) * 180;
+  setTimeout(() => { document.getElementById('gauge-needle').style.transform = `rotate(${needleAngle}deg)`; }, 100);
+  const numEl = document.getElementById('score-number');
+  numEl.classList.remove('show'); numEl.textContent = '0';
+  let current = 0;
+  const target = scores.total;
+  const step   = Math.max(1, Math.ceil(target / 40));
+  setTimeout(() => {
+    numEl.classList.add('show');
+    const t = setInterval(() => {
+      current = Math.min(current + step, target);
+      numEl.textContent = current;
+      if (current >= target) clearInterval(t);
+    }, 25);
+  }, 400);
+  function setBar(barId, valId, raw, max, label) {
+    const pct = Math.round((raw / max) * 100);
+    const el  = document.getElementById(barId);
+    el.className = `factor-bar ${barClass(pct)}`;
+    setTimeout(() => { el.style.width = pct + '%'; }, 200);
+    document.getElementById(valId).textContent = label;
+  }
+  setBar('bar-age',     'val-age',     scores.ageFactor,   35, scores.ageFactor<=8?'Low':scores.ageFactor<=22?'Medium':'High');
+  setBar('bar-mileage', 'val-mileage', scores.milageFactor, 40, scores.milageFactor<=10?'Low':scores.milageFactor<=26?'Medium':'High');
+  setBar('bar-brand',   'val-brand',   scores.brandFactor,  35, getReliabilityLabel(scores.brandFactor));
+  document.getElementById('explanation').innerHTML = buildExplanation(make, model, year, mileage, scores);
+
+  // VIN chip
+  const chip = document.getElementById('vin-chip');
+  if (vin) {
+    document.getElementById('vin-chip-text').textContent = `VIN: ${vin}`;
+    chip.style.display = 'inline-flex';
+  } else {
+    chip.style.display = 'none';
+  }
+
+  // Update affiliate links
+  updateAffiliateLinks(vin);
+
+  const resultEl = document.getElementById('result');
+  resultEl.style.display = 'block';
+  requestAnimationFrame(() => resultEl.classList.add('visible'));
+  document.getElementById('affiliate').style.display = 'block';
+  setTimeout(() => { resultEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+}
+function shareResult() {
+  if (!lastResult) return;
+  const { make, model, year, mileage, score, level, vin } = lastResult;
+  const vinPart = vin ? ` | VIN: ${vin}` : '';
+  const text = `🍋 Lemonhead Risk Score for ${year} ${make} ${model} (${mileage.toLocaleString()} mi)${vinPart}: ${score}/100 — ${level.toUpperCase()} RISK. Try it free at lemonhead.app`;
+  if (navigator.share) {
+    navigator.share({ title:'Lemonhead Result', text }).catch(() => copyText(text));
+  } else { copyText(text); }
+}
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-share');
+    btn.textContent = '✅ Copied to clipboard!';
+    setTimeout(() => { btn.innerHTML = '🔗 Share This Result'; }, 2500);
+  }).catch(() => alert('Copy this:\n\n' + text));
+}
+['make','model','year','mileage'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    document.getElementById(id).classList.remove('error');
+    const e = document.getElementById('err-'+id);
+    if (e) e.classList.remove('show');
+  });
+});
+// Also wire VIN field clear events
+document.getElementById('vin').addEventListener('input', () => {
+  document.getElementById('vin').classList.remove('error');
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
+</script>
+</body>
+</html>
