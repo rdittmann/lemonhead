@@ -369,6 +369,15 @@ footer a { color: var(--gray-300); }
         <input type="number" id="year" placeholder="e.g. 2018" min="1980" max="2026">
         <span class="error-msg" id="err-year">Enter a year between 1980–2026.</span>
       </div>
+
+      <div class="form-group full">
+        <label style="font-family:'DM Sans',sans-serif;line-height:1.6;">Trim Level</label>
+        <div class="btn-group" id="grp-trim">
+          <button class="btn-group-item safe" data-val="base" onclick="selectGroup(this,'trim')">Base / Standard</button>
+          <button class="btn-group-item selected" data-val="mid" onclick="selectGroup(this,'trim')">Mid / Sport</button>
+          <button class="btn-group-item warning" data-val="premium" onclick="selectGroup(this,'trim')">Premium / Top Trim</button>
+        </div>
+      </div>
     </div>
 
     <div class="step-nav">
@@ -582,7 +591,7 @@ footer a { color: var(--gray-300); }
 // ── STATE ────────────────────────────────────────────────────────────────────
 let currentVin = '';
 let vinDebounceTimer = null;
-const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full' };
+const selections = { driving: 'highway', owners: '1', accidents: 'none', title: 'clean', service: 'full', trim: 'mid' };
 
 // ── MAKES & MODELS ───────────────────────────────────────────────────────────
 const MAKES = ['Acura','Audi','BMW','Buick','Cadillac','Chevrolet','Chrysler','Dodge','Ford','GMC','Honda','Hyundai','Infiniti','Jeep','Kia','Lexus','Lincoln','Mazda','Mercedes-Benz','Mitsubishi','Nissan','Ram','Subaru','Toyota','Volkswagen','Volvo','Other'].sort((a,b) => a==='Other'?1:b==='Other'?-1:a.localeCompare(b));
@@ -925,7 +934,7 @@ function getBasePrice(make, model) {
   return makeData['default'] || 28000;
 }
 
-function estimateMarketValue(make, model, year, mileage, accidents, title, service) {
+function estimateMarketValue(make, model, year, mileage, accidents, title, service, trim) {
   const age = new Date().getFullYear() - year;
   const base = getBasePrice(make, model);
   const depr = getDepreciationFactor(age, mileage);
@@ -943,6 +952,10 @@ function estimateMarketValue(make, model, year, mileage, accidents, title, servi
     else if (age >= 7)  luxMult = 0.75;
     estimate = Math.round(estimate * luxMult / 100) * 100;
   }
+
+  // Trim level adjustment
+  if      (trim === 'base')    estimate = Math.round(estimate * 0.90 / 100) * 100;
+  else if (trim === 'premium') estimate = Math.round(estimate * 1.15 / 100) * 100;
 
   // Hard mileage value ceilings based on real market data
   if      (mileage >= 300000) estimate = Math.min(estimate, 2500);
@@ -990,7 +1003,7 @@ function renderPriceVerdict(askingPrice, make, model, year, mileage, lemonScore)
   const wrap = document.getElementById('price-verdict-wrap');
   if (!askingPrice || askingPrice <= 0) { wrap.style.display='none'; return; }
 
-  const { estimate, low, high } = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service);
+  const { estimate, low, high } = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service, selections.trim);
   const verdict = getPriceVerdict(askingPrice, low, high, estimate, make, model, year, selections.title);
 
   const barMin = Math.min(low * 0.7, askingPrice * 0.85);
@@ -1280,7 +1293,7 @@ function analyze() {
   // Price class
   let priceClass = null, estimatedValue = null;
   if (askingPrice > 0) {
-    const mv = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service);
+    const mv = estimateMarketValue(make, model, year, mileage, selections.accidents, selections.title, selections.service, selections.trim);
     estimatedValue = mv.estimate;
     const pct = askingPrice / mv.estimate;
     if (pct < 0.75)       priceClass = 'danger';
